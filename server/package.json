@@ -4,7 +4,8 @@
   "description": "A nodejs server with mongodb for a chat messenging application",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "",
+    "start": "nodemon index.js"
   },
   "author": "Solomon Asiedu",
   "license": "ISC",
