@@ -5,7 +5,7 @@ const connectDB = require('./db/connect')
 const authRouter = require('./routes/auth')
 require('dotenv').config()
 
-
+app.use(express.json())
 
 
 
