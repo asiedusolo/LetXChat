@@ -8,7 +8,6 @@ const saltRounds = 10
 
 
 router.post('/register', async (req, res) => {
-    // res.send('User registered')
     try {
         
         const salt = await bcrypt.genSalt(saltRounds)
@@ -32,8 +31,22 @@ router.post('/register', async (req, res) => {
 })
 
 
-router.post('/login', (req, res) => {
-    res.send('User logged in')
+router.post('/login', async(req, res) => {
+    try {
+        const user = await User.findOne({staff_email: req.body.staff_email})
+        if (!user) {
+            return res.status(404).json({msg: 'User not found'})
+        }
+
+        const existingPassword = await bcrypt.compare(req.body.password, user.password)
+        if (!existingPassword) {
+            return res.status(404).json({msg: 'Wrong password'})
+        }
+        res.status(200).json(user)
+
+    } catch (error) {
+        res.status(500).json(error)
+    }
 })
 
 
