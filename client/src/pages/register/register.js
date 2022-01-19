@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
 import Modal from "./Modal";
+import {Link} from "react-router-dom"
+
 
 const Register = () => {
   const fullNameRef = useRef(null);
@@ -29,7 +31,6 @@ const Register = () => {
       };
       try {
         await axios.post("http://localhost:5000/api/auth/register", newUser);
-        // alert(JSON.stringify(newUser));
         setIsValidUser(true);
         setShowModal(true)
         history.push("/login");
@@ -113,7 +114,7 @@ const Register = () => {
           />
           <br />
           <button type="submit">Sign up</button>
-          <button>Log into Account</button>
+          <button><Link to="/login">Log into Account</Link></button>
         </form>
       </div>
     </div>
