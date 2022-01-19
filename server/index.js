@@ -4,8 +4,10 @@ const port = 5000
 const connectDB = require('./db/connect')
 const authRouter = require('./routes/auth')
 require('dotenv').config()
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
 
 
