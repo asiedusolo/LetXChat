@@ -6,7 +6,7 @@ const Modal = ({ isValidUser, hideModal }) => {
         setTimeout(() => {
             hideModal()
         }, 3000)
-    }, [])
+    }, [hideModal])
     return <div>
         <h3>{isValidUser ? 'New user created successfully' : 'Staff Email or Username already exist'}</h3>
   </div>;
