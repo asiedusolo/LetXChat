@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
+import Modal from "./Modal";
 
 const Register = () => {
   const fullNameRef = useRef(null);
@@ -10,6 +11,9 @@ const Register = () => {
   const passwordRef = useRef(null);
   const passwordConfirmRef = useRef(null);
   const history = useHistory();
+
+  const [isValidUser, setIsValidUser] = useState();
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,21 +28,29 @@ const Register = () => {
         password: passwordRef.current.value,
       };
       try {
-        await axios.post(
-          "http://localhost:5000/api/auth/register",
-          newUser
-        );
+        await axios.post("http://localhost:5000/api/auth/register", newUser);
         // alert(JSON.stringify(newUser));
+        setIsValidUser(true);
+        setShowModal(true)
         history.push("/login");
       } catch (error) {
+        setIsValidUser(false);
+        setShowModal(true)
         console.log(error);
       }
     }
+  };
+
+  const hideModal = () => {
+    setShowModal(false);
   };
   return (
     <div>
       <div>
         <h3>Enter your details to sign up on LetXChat</h3>
+      </div>
+      <div>
+        {showModal && <Modal isValidUser={isValidUser} hideModal={hideModal} />}
       </div>
       <div>
         <form onSubmit={handleSubmit}>
