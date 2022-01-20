@@ -1,17 +1,20 @@
-import './App.css';
+import "./App.css";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
-  // Redirect
-} from 'react-router-dom'
-import LandingPage from './pages/landingPage/landingPage';
-import Register from './pages/register/register';
-import Login from './pages/login/login';
-import ChatPage from './pages/chatPage/chatPage';
-import Profile from './pages/profile/profile'
+  Redirect,
+} from "react-router-dom";
+import LandingPage from "./pages/landingPage/landingPage";
+import Register from "./pages/register/register";
+import Login from "./pages/login/login";
+import ChatPage from "./pages/chatPage/chatPage";
+import Profile from "./pages/profile/profile";
+import { useContext } from "react";
+import {AuthContext} from "./contexts/auth/authcontext";
 
 function App() {
+  const { user } = useContext(AuthContext);
   return (
     <Router>
       <Switch>
@@ -22,7 +25,8 @@ function App() {
           <Register />
         </Route>
         <Route path="/login">
-          <Login />
+          {user ? <Redirect to="/chatroom" /> : <Login />}
+          {/* <Login /> */}
         </Route>
         <Route path="/chatroom">
           <ChatPage />
