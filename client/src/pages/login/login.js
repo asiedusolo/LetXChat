@@ -1,14 +1,22 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useContext } from "react";
 import { useHistory } from "react-router";
-import axios from "axios";
-import Modal from "./modal";
+// import axios from "axios";
+// import Modal from "./modal";
+import { AuthContext } from '../../contexts/auth/authcontext'
+import LoginCall from "./loginAPICalls"
 
 const Login = () => {
   const staffEmailRef = useRef(null);
   const passwordRef = useRef(null);
     const history = useHistory();
-    const [isValidUser, setIsValidUser] = useState()
-    const [showModal, setShowModal] = useState(false)
+    // const [isValidUser, setIsValidUser] = useState()
+    // const [showModal, setShowModal] = useState(false)
+  const { isFetchingUser, user, error, dispatch } = useContext(AuthContext)
+  
+  // console.log("is fetching", isFetchingUser)
+  // console.log("function", dispatch)
+  // console.log("User", user)
+  // console.log("Error", error)
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -18,29 +26,21 @@ const Login = () => {
       password: passwordRef.current.value,
     };
 
-    try {
-        await axios.post("http://localhost:5000/api/auth/login", userInfo);
-        setIsValidUser(true)
-        setShowModal(true)
-      history.push("/chatroom");
-    } catch (error) {
-        setIsValidUser(false)
-        setShowModal(true)
-        console.log(error);
-        
-    }
-  };
+    LoginCall(userInfo, dispatch)
     
-    const hideModal = () => {
+
+  };
+
+    /* const hideModal = () => {
         setShowModal(false)
-    }
+    } */
   return (
     <div>
       <div>
         <h1>Enter your details to login</h1>
       </div>
           <div>
-              {showModal && <Modal isValidUser={isValidUser} hideModal={hideModal} />}
+              {/* {showModal && <Modal isValidUser={isValidUser} hideModal={hideModal} />} */}
       </div>
       <div>
         <form onSubmit={handleLogin}>
@@ -61,7 +61,8 @@ const Login = () => {
             required
           />
           <br />
-          <button type="submit">Login</button>
+          <button type="submit">{isFetchingUser ? 'Logging in...' : 'Login'}</button>
+          {error && <button>Dont have an account? Sign up</button>}
         </form>
       </div>
     </div>
