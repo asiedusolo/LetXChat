@@ -12,12 +12,6 @@ const Login = () => {
     // const [isValidUser, setIsValidUser] = useState()
     // const [showModal, setShowModal] = useState(false)
   const { isFetchingUser, user, error, dispatch } = useContext(AuthContext)
-  
-  // console.log("is fetching", isFetchingUser)
-  // console.log("function", dispatch)
-  // console.log("User", user)
-  // console.log("Error", error)
-
   const handleLogin = async (e) => {
     e.preventDefault();
 
