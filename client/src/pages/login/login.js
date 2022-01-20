@@ -4,6 +4,7 @@ import { useHistory } from "react-router";
 // import Modal from "./modal";
 import { AuthContext } from '../../contexts/auth/authcontext'
 import LoginCall from "./loginAPICalls"
+import {Link} from 'react-router-dom'
 
 const Login = () => {
   const staffEmailRef = useRef(null);
@@ -56,7 +57,7 @@ const Login = () => {
           />
           <br />
           <button type="submit">{isFetchingUser ? 'Logging in...' : 'Login'}</button>
-          {error && <button>Dont have an account? Sign up</button>}
+          {error && <button><Link to="/register">Dont have an account? Sign up</Link></button>}
         </form>
       </div>
     </div>
