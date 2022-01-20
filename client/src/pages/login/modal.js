@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 
-const Modal = ({ isValidUser, hideModal }) => {
+const Modal = ({ hideModal }) => {
     
     useEffect(() => {
         setTimeout(() => {
@@ -8,7 +8,7 @@ const Modal = ({ isValidUser, hideModal }) => {
         }, 1000)
     }, [hideModal])
     return <div>
-        <h3>{isValidUser ? 'User logged in successfully' : 'Please enter valid credentials'}</h3>
+        <h3>Please enter valid credentials</h3>
   </div>;
 };
 
