@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const express = require("express");
 const router = express.Router();
-const bycrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const saltRounds = 10;
 
 router.get("/", async (req, res) => {
