@@ -9,6 +9,7 @@ import LandingPage from './pages/landingPage/landingPage';
 import Register from './pages/register/register';
 import Login from './pages/login/login';
 import ChatPage from './pages/chatPage/chatPage';
+import Profile from './pages/profile/profile'
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route path="/chatroom">
           <ChatPage />
+        </Route>
+        <Route path="/profile/:username">
+          <Profile />
         </Route>
       </Switch>
     </Router>
