@@ -29,10 +29,10 @@ function App() {
           {/* <Login /> */}
         </Route>
         <Route path="/chatroom">
-          <ChatPage />
+          {user ? <ChatPage /> : <Redirect to="/login" />}
         </Route>
         <Route path="/profile/:username">
-          <Profile />
+          {user ? <Profile /> : <Redirect to="/login" />}
         </Route>
       </Switch>
     </Router>
