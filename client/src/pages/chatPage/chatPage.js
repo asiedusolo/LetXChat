@@ -1,15 +1,30 @@
-import React from 'react'
-import Topbar from '../../components/topbar/topbar'
+import React from "react";
+import Topbar from "../../components/topbar/topbar";
+import './chatPage.css'
 
 const ChatPage = () => {
-     
-    return (
-        <div>
-            <Topbar />
-            <h1>Enter a chat room and begin chatting</h1>
+  return (
+    <div>
+      <Topbar />
+      <div className="chatPage">
+        <div class="chatRooms">
+                  <div className="chatRoomsWrapper">
+                      Chatroom
+          </div>
         </div>
-    )
- }
+        <div className="chatBox">
+                  <div className="chatBoxWrapper">
+                      ChatBox
+          </div>
+        </div>
+        <div className="chatDetails">
+                  <div className="chatDetailsWrapper">
+                      ChatDetail
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
-
- export default ChatPage
+export default ChatPage;
