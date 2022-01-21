@@ -9,7 +9,8 @@ const ChatPage = () => {
       <div className="chatPage">
         <div class="chatRooms">
                   <div className="chatRoomsWrapper">
-                      Chatroom
+                      <input placeholder="Search for Rooms" className="chatRoomsSearch" />
+                      
           </div>
         </div>
         <div className="chatBox">

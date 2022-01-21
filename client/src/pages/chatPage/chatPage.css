@@ -17,6 +17,13 @@
     flex: 3.5;
 }
 
+.chatRoomsSearch{
+    width: 90%;
+    padding: 10px 0;
+    border: none;
+    border-bottom: 1px solid grey;
+}
+
 .chatRoomsWrapper, .chatBoxWrapper, .chatDetailsWrapper{
     padding: 10px;
     height: 100%;
