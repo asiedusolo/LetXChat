@@ -1,0 +1,24 @@
+.chatPage{
+    height: calc(100vh - 70px);
+    display: flex;
+
+}
+
+
+.chatRooms{
+    flex: 3.5;
+}
+
+.chatBox{
+    flex: 5.5;
+}
+
+.chatDetails{
+    flex: 3.5;
+}
+
+.chatRoomsWrapper, .chatBoxWrapper, .chatDetailsWrapper{
+    padding: 10px;
+    height: 100%;
+    background-color: rgb(211, 211, 211);
+}
