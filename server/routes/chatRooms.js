@@ -28,6 +28,17 @@ router.post('/', async (req, res) => {
     res.status(200).json(savedChatRoom)
 })
 
+// get all chatrooms user belong to 
+router.get('/:userId', async (req, res) => {
+    try {
+        const userChatRooms = await ChatRoom.find({
+            members: { $in: [req.params.userId] },
+        })
+        res.status(200).json(userChatRooms)
+    } catch (error) {
+        res.status(200).json(error)
+    }
+})
 
 
 
