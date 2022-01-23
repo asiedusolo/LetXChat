@@ -28,7 +28,11 @@ const ChatPage = () => {
               <Message />
               <Message ownMessage={true}/>
             </div>
-            <div className="chatBoxBottom"></div>
+            <div className="chatBoxBottom">
+              <button className="chatAttatchment">Attachment</button>
+              <textarea className="chatMessageInput" placeholder="Type your message here"></textarea>
+              <button className="chatSubmitButton">Send</button>
+            </div>
           </div>
         </div>
         <div className="chatDetails">

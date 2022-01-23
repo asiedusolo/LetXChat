@@ -13,6 +13,34 @@
     flex: 7.5;
 }
 
+.chatBoxBottom{
+    margin-top:10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.chatMessageInput{
+    width: 80%;
+    height: 90px;
+    padding: 10px;
+}
+
+.chatSubmitButton{
+    width: 70px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.chatAttatchment{
+    width: 90px;
+    border: none;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
 .chatDetails{
     flex: 2.5;
 }
