@@ -4,7 +4,8 @@ const ChatRoomSchema = new mongoose.Schema({
     chatRoomName: {
         type: String,
         trim: true,
-        requried: true, 
+        required: true,
+        unique: true,
     },
     avatarUrl: {
         type: String,

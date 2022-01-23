@@ -4,6 +4,8 @@ const port = 5000
 const connectDB = require('./db/connect')
 const authRouter = require('./routes/auth')
 const userRouter = require('./routes/users')
+const messageRouter = require('./routes/messages')
+const chatRoomRouter = require('./routes/chatRooms')
 require('dotenv').config()
 const cors = require('cors')
 
@@ -22,6 +24,9 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
+app.use('/api/messages', messageRouter)
+app.use('/api/chatRooms', chatRoomRouter)
+
 
 const start = async() => {
     try {
