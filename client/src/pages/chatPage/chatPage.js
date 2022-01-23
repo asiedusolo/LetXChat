@@ -2,6 +2,7 @@ import React from "react";
 import Topbar from "../../components/topbar/topbar";
 import ChatRoom from "../../components/chatRooms/chatRoom";
 import Message from '../../components/message/message'
+import ChatDetails from "../../components/chatDetails/chatDetails"
 import "./chatPage.css";
 
 const ChatPage = () => {
@@ -44,7 +45,9 @@ const ChatPage = () => {
           </div>
         </div>
         <div className="chatDetails">
-          <div className="chatDetailsWrapper">ChatDetail</div>
+          <div className="chatDetailsWrapper">
+              <ChatDetails />
+          </div>
         </div>
       </div>
     </div>
