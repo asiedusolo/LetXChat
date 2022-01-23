@@ -40,6 +40,19 @@ router.get('/:userId', async (req, res) => {
     }
 })
 
+// join a chatroom
+
+router.put('/:chatRoomId/:userId', async (req, res) => {
+    const { chatRoomId, userId } = req.params
+    try {
+        const chatRoom = await ChatRoom.findOneAndUpdate({ _id: chatRoomId },
+            { $push: { members: userId } }, {new: true, upsert: true})
+        res.status(200).json(chatRoom)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+
 
 
 module.exports = router
