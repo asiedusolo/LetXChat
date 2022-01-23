@@ -15,5 +15,16 @@ router.post('/', async (req, res) => {
 
 
 
+router.get('/:chatRoomId', async (req, res) => {
+    try {
+        const messages = await Message.find({
+            chatRoomId: req.params.chatRoomId
+        })
+        res.status(200).send(messages)
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+
 
 module.exports = router
