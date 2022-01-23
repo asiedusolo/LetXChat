@@ -6,7 +6,7 @@
 }
 
 .chatRoom:hover{
-    background-color: white;
+    background-color: rgb(206, 106, 12);
     cursor: pointer;
 }
 

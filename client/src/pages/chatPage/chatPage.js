@@ -1,6 +1,7 @@
 import React from "react";
 import Topbar from "../../components/topbar/topbar";
 import ChatRoom from "../../components/chatRooms/chatRoom";
+import Message from '../../components/message/message'
 import "./chatPage.css";
 
 const ChatPage = () => {
@@ -21,7 +22,11 @@ const ChatPage = () => {
         <div className="chatBox">
           <div className="chatBoxWrapper">
             <div className="ChatBoxTop">
-              
+              <Message />
+              <Message />
+              <Message ownMessage={true}/>
+              <Message />
+              <Message ownMessage={true}/>
             </div>
             <div className="chatBoxBottom"></div>
           </div>
