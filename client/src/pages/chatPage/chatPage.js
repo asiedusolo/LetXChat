@@ -21,12 +21,20 @@ const ChatPage = () => {
         </div>
         <div className="chatBox">
           <div className="chatBoxWrapper">
-            <div className="ChatBoxTop">
+            <div className="chatBoxTop">
               <Message />
               <Message />
               <Message ownMessage={true}/>
               <Message />
-              <Message ownMessage={true}/>
+              <Message ownMessage={true} />
+              <Message />
+              <Message />
+              <Message />
+              <Message />
+              <Message />
+              <Message />
+              <Message />
+              
             </div>
             <div className="chatBoxBottom">
               <button className="chatAttatchment">Attachment</button>
