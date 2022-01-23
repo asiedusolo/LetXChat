@@ -15,6 +15,19 @@ router.get('/', async (req, res) => {
 })
 
 
+// create a new chatRoom
+router.post('/', async (req, res) => {
+    const newChatRoom = new ChatRoom({
+        chatRoomName: req.body.chatRoomName,
+        avatarUrl: req.body.avatarUrl,
+        creatorId: req.body.creatorId,
+        members: [req.body.creatorId]
+    })
+
+    const savedChatRoom = await newChatRoom.save()
+    res.status(200).json(savedChatRoom)
+})
+
 
 
 
