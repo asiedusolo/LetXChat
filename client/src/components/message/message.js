@@ -2,7 +2,8 @@ import "./message.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-const Message = ({ ownMessage, text}) => {
+const Message = ({ ownMessage, text, senderUsername }) => {
+  console.log(senderUsername)
   return (
     <div className={ownMessage ? "message own" : "message"}>
       <div className="messageTop">
@@ -12,6 +13,7 @@ const Message = ({ ownMessage, text}) => {
           alt=""
         />
         <p className="messageText">{text}</p>
+        <p>{senderUsername}</p>
       </div>
       <div className="messageBottom">1 hour ago</div>
     </div>

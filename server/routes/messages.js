@@ -22,6 +22,19 @@ router.get('/', async (req, res) => {
     }
 })
 
+
+router.delete('/:messageId', async (req, res) => {
+    try {
+        const deletedMessage = await Message.findByIdAndDelete(req.params.messageId)
+        if (!deletedMessage) {
+            return res.status(404).json({msg: `No message with id ${req.params.messageId} found`})
+        }
+        res.status(200).json({success: true})
+    } catch (error) {
+        res.status(500).json(error)
+    }
+})
+
 router.get('/:chatRoomId', async (req, res) => {
     try {
         const messages = await Message.find({

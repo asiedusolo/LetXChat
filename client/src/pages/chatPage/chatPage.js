@@ -14,13 +14,14 @@ const ChatPage = () => {
   const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
-
+  console.log(currentChatRoom._id)
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
         `http://localhost:5000/api/messages/${currentChatRoom._id}`
       );
       setCurrentChatRoomMessages(response.data);
+      console.log("CRM", response.data);
     };
     getCurrentChatRoomMessages();
   }, [currentChatRoom._id]);
