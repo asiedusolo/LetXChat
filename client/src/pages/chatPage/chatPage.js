@@ -11,13 +11,15 @@ import "./chatPage.css";
 const ChatPage = () => {
   const { user } = useContext(AuthContext)
   const [chatRooms, setChatRooms] = useState([])
+  const [currentChatRoom, setCurrentChatRoom] = useState({})
 
 
   useEffect(() => {
     const getChatRooms = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/chatRooms/${user._id}`)
-      setChatRooms(response.data)
+        setChatRooms(response.data)
+        console.log(response.data)
       } catch (error) {
         console.log(error)
       }
@@ -25,6 +27,10 @@ const ChatPage = () => {
     getChatRooms()
   }, [user._id]);
   console.log(user)
+  const handleChatRoomSelect = (chatRoom) => {
+    setCurrentChatRoom(chatRoom)
+  }
+  console.log({currentChatRoom})
   return (
     <div>
       <Topbar />
@@ -34,7 +40,7 @@ const ChatPage = () => {
             <input placeholder="Search for Rooms" className="chatRoomsSearch" />
             {chatRooms.map((chatRoom) => {
               return <div key={chatRoom._id}>
-                <ChatRoom {...chatRoom} />
+                <ChatRoom {...chatRoom} chatRoom={chatRoom} handleChatRoomSelect={handleChatRoomSelect} />
               </div>
             })}
           </div>
@@ -65,7 +71,7 @@ const ChatPage = () => {
         </div>
         <div className="chatDetails">
           <div className="chatDetailsWrapper">
-              <ChatDetails />
+            <ChatDetails currentChatRoom={currentChatRoom}/>
           </div>
         </div>
       </div>
