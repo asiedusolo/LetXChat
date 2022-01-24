@@ -13,8 +13,15 @@ const ChatPage = () => {
   const [chatRooms, setChatRooms] = useState([]);
   const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
+  const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
 
-
+  useEffect(() => {
+    const getCurrentChatRoomMessages = async () => {
+      const response = await axios.get(`http://localhost:5000/api/messages/${currentChatRoom._id}`)
+      console.log("Messages", response)
+    }
+    getCurrentChatRoomMessages()
+  }, [currentChatRoom._id])
   useEffect(() => {
     const getChatRooms = async () => {
       try {
