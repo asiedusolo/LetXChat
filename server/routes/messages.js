@@ -13,7 +13,14 @@ router.post('/', async (req, res) => {
     }
 })
 
-
+router.get('/', async (req, res) => {
+    try {
+        const allMessages = await Message.find({})
+        res.status(200).json(allMessages)
+    } catch (error) {
+        res.status(500).json(error)        
+    }
+})
 
 router.get('/:chatRoomId', async (req, res) => {
     try {
