@@ -32,11 +32,6 @@ const ChatPage = () => {
         <div class="chatRooms">
           <div className="chatRoomsWrapper">
             <input placeholder="Search for Rooms" className="chatRoomsSearch" />
-            {/* <ChatRoom />
-            <ChatRoom />
-            <ChatRoom />
-            <ChatRoom />
-            <ChatRoom /> */}
             {chatRooms.map((chatRoom) => {
               return <div key={chatRoom._id}>
                 <ChatRoom {...chatRoom} />
