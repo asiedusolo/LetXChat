@@ -17,11 +17,13 @@ const ChatPage = () => {
 
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
-      const response = await axios.get(`http://localhost:5000/api/messages/${currentChatRoom._id}`)
-      console.log("Messages", response)
-    }
-    getCurrentChatRoomMessages()
-  }, [currentChatRoom._id])
+      const response = await axios.get(
+        `http://localhost:5000/api/messages/${currentChatRoom._id}`
+      );
+      setCurrentChatRoomMessages(response.data);
+    };
+    getCurrentChatRoomMessages();
+  }, [currentChatRoom._id]);
   useEffect(() => {
     const getChatRooms = async () => {
       try {
@@ -63,18 +65,12 @@ const ChatPage = () => {
         <div className="chatBox">
           <div className="chatBoxWrapper">
             <div className="chatBoxTop">
-              <Message />
-              <Message />
-              <Message ownMessage={true} />
-              <Message />
-              <Message ownMessage={true} />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
-              <Message />
+              
+              {currentChatRoomMessages.map((message) => {
+                return <div key={message._id}>
+                  <Message {...message} user={user} ownMessage={user._id === message.senderId}/>
+                </div>;
+              })}
             </div>
             <div className="chatBoxBottom">
               <button className="chatAttatchment">Attachment</button>
@@ -88,7 +84,10 @@ const ChatPage = () => {
         </div>
         <div className="chatDetails">
           <div className="chatDetailsWrapper">
-            <ChatDetails currentChatRoom={currentChatRoom} currentChatRoomMembers={currentChatRoomMembers}/>
+            <ChatDetails
+              currentChatRoom={currentChatRoom}
+              currentChatRoomMembers={currentChatRoomMembers}
+            />
           </div>
         </div>
       </div>
