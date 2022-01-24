@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import './chatDetails.css'
 
-const ChatDetails = () => {
+const ChatDetails = ({currentChatRoom}) => {
     const membersTempArray = [
         {
             avatarUrl: "",
@@ -68,12 +69,23 @@ const ChatDetails = () => {
             name: "Kofi Nketsiah"
         },
     ];
+
+    const [chatCreator, setChatCreator] = useState('')
+    
+    useEffect(() => {
+        const getChatCreator = async () => {
+            const response = await axios.get(`http://localhost:5000/api/user?userId=${currentChatRoom.creatorId}`);
+            setChatCreator(response.data)
+            console.log("R", response.data)
+        }
+        getChatCreator()
+    }, [currentChatRoom.creatorId])
     return <div className="chatDetails">
         <div className="chatRoomMeta">
-            <h2>Full Stack</h2>
+            <h2>{currentChatRoom.chatRoomName}</h2>
             <div className="metaRight">
                 <h3>Created By:</h3>
-                <p>Solomon Asiedu</p>
+                <p>{chatCreator.name}</p>
                 <h3>Date Created:</h3>
                 <p>20th Jan, 2022</p>
             </div>
