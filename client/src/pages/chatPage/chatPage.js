@@ -111,7 +111,7 @@ const ChatPage = () => {
                   </div>
                 );
               }) :
-              <span className="noMessages">Click on a card to access chat messages</span>}
+              <span className="noMessages">Open a chat room to access chat messages</span>}
             </div>
             <div className="chatBoxBottom">
               <button className="chatAttatchment">Attachment</button>

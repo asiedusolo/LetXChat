@@ -23,7 +23,7 @@
 .noMessages{
     position: absolute;
     font-size: 80px;
-    top: 30%;
+    top: 10%;
     /* text-align: center; */
     color: grey;
     font-weight: 400px;
@@ -86,7 +86,7 @@
 
 .noCurrentChat{
     position: absolute;
-    top: 35%;
+    top: 15%;
     font-size: 30px;
     color: grey;
 }
