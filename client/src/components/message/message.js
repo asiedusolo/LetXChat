@@ -1,6 +1,4 @@
 import "./message.css";
-import { useState, useEffect } from "react";
-import axios from "axios";
 
 const Message = ({ ownMessage, text, senderUsername }) => {
   console.log(senderUsername)
