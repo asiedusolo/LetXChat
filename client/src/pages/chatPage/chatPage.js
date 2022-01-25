@@ -3,7 +3,7 @@ import Topbar from "../../components/topbar/topbar";
 import ChatRoom from "../../components/chatRooms/chatRoom";
 import Message from "../../components/message/message";
 import ChatDetails from "../../components/chatDetails/chatDetails";
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import "./chatPage.css";
@@ -15,6 +15,7 @@ const ChatPage = () => {
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const scrollRef = useRef(null)
 
   console.log(currentChatRoom._id);
 
@@ -46,6 +47,10 @@ const ChatPage = () => {
     setCurrentChatRoom(chatRoom);
     setCurrentChatRoomMembers(chatRoom.members);
   };
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({behaviour: "smooth"})
+  }, [currentChatRoomMessages])
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -97,7 +102,7 @@ const ChatPage = () => {
             <div className="chatBoxTop">
               {currentChatRoomMessages.map((message) => {
                 return (
-                  <div key={message._id}>
+                  <div key={message._id} ref={scrollRef}>
                     <Message
                       {...message}
                       user={user}
