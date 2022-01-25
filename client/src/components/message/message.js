@@ -1,5 +1,5 @@
 import "./message.css";
-import {format} from 'timeago.js'
+import TimeAgo from 'react-timeago'
 
 const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   console.log(senderUsername)
@@ -14,9 +14,9 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
         <p className="messageText">{text}</p>
         <p>{senderUsername}</p>
       </div>
-      <div className="messageBottom">{format(createdAt)}</div>
+      <TimeAgo className="messageBottom" date={createdAt}/>
     </div>
   );
-};
+}
 
 export default Message;
