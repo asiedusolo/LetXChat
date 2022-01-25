@@ -1,6 +1,6 @@
 import "./message.css";
 
-const Message = ({ ownMessage, text, senderUsername }) => {
+const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   console.log(senderUsername)
   return (
     <div className={ownMessage ? "message own" : "message"}>
