@@ -79,3 +79,14 @@
     height: 100%;
     background-color: white;
 }
+
+.chatDetailsWrapper{
+    position: relative;
+}
+
+.noCurrentChat{
+    position: absolute;
+    top: 35%;
+    font-size: 30px;
+    color: grey;
+}

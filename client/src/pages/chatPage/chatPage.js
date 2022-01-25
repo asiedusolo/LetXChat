@@ -129,10 +129,10 @@ const ChatPage = () => {
         </div>
         <div className="chatDetails">
           <div className="chatDetailsWrapper">
-            <ChatDetails
+            {currentChatRoom.chatRoomName ? <ChatDetails
               currentChatRoom={currentChatRoom}
               currentChatRoomMembers={currentChatRoomMembers}
-            />
+            />: <div className="noCurrentChat">Click on a chat room to display chat details</div>}
           </div>
         </div>
       </div>
