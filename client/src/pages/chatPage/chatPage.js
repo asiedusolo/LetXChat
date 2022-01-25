@@ -7,6 +7,7 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import "./chatPage.css";
+import {io} from 'socket.io-client'
 
 const ChatPage = () => {
   const { user } = useContext(AuthContext);
@@ -15,6 +16,7 @@ const ChatPage = () => {
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [socket, setSocket] = useState(null)
   const scrollRef = useRef(null)
 
   console.log(currentChatRoom._id);
