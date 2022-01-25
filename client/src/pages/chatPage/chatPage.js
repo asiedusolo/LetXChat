@@ -14,10 +14,9 @@ const ChatPage = () => {
   const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
-  const [newMessage, setNewMessage] = useState("")
+  const [newMessage, setNewMessage] = useState("");
 
-  console.log(currentChatRoom._id)
-
+  console.log(currentChatRoom._id);
 
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
@@ -48,22 +47,31 @@ const ChatPage = () => {
     setCurrentChatRoomMembers(chatRoom.members);
   };
 
-  const sendMessage = async(e) => {
-    e.preventDefault()
-    const message = {
-      chatRoomId: currentChatRoom._id,
-      senderId: user._id,
-      senderUsername: user.username,
-      text: newMessage
-    }
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    if (newMessage) {
+      const message = {
+        chatRoomId: currentChatRoom._id,
+        senderId: user._id,
+        senderUsername: user.username,
+        text: newMessage,
+      };
 
-    try {
-      const messageSent = await axios.post('http://localhost:5000/api/messages', message)
-      setCurrentChatRoomMessages([...currentChatRoomMessages, messageSent.data])
-    } catch (error) {
-      console.log(error)
+      try {
+        const messageSent = await axios.post(
+          "http://localhost:5000/api/messages",
+          message
+        );
+        setCurrentChatRoomMessages([
+          ...currentChatRoomMessages,
+          messageSent.data,
+        ]);
+        setNewMessage("");
+      } catch (error) {
+        console.log(error);
+      }
     }
-  }
+  };
   return (
     <div>
       <Topbar />
@@ -87,11 +95,16 @@ const ChatPage = () => {
         <div className="chatBox">
           <div className="chatBoxWrapper">
             <div className="chatBoxTop">
-              
               {currentChatRoomMessages.map((message) => {
-                return <div key={message._id}>
-                  <Message {...message} user={user} ownMessage={user._id === message.senderId}/>
-                </div>;
+                return (
+                  <div key={message._id}>
+                    <Message
+                      {...message}
+                      user={user}
+                      ownMessage={user._id === message.senderId}
+                    />
+                  </div>
+                );
               })}
             </div>
             <div className="chatBoxBottom">
@@ -102,7 +115,9 @@ const ChatPage = () => {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
               ></textarea>
-              <button className="chatSubmitButton" onClick={sendMessage}>Send</button>
+              <button className="chatSubmitButton" onClick={sendMessage}>
+                Send
+              </button>
             </div>
           </div>
         </div>
