@@ -14,7 +14,11 @@ const ChatPage = () => {
   const [currentChatRoom, setCurrentChatRoom] = useState({});
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
+  const [newMessage, setNewMessage] = useState("")
+
   console.log(currentChatRoom._id)
+
+
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
@@ -43,6 +47,23 @@ const ChatPage = () => {
     setCurrentChatRoom(chatRoom);
     setCurrentChatRoomMembers(chatRoom.members);
   };
+
+  const sendMessage = async(e) => {
+    e.preventDefault()
+    const message = {
+      chatRoomId: currentChatRoom._id,
+      senderId: user._id,
+      senderUsername: user.username,
+      text: newMessage
+    }
+
+    try {
+      const messageSent = await axios.post('http://localhost:5000/api/messages', message)
+      setCurrentChatRoomMessages([...currentChatRoomMessages, messageSent.data])
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div>
       <Topbar />
@@ -78,8 +99,10 @@ const ChatPage = () => {
               <textarea
                 className="chatMessageInput"
                 placeholder="Type your message here"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
               ></textarea>
-              <button className="chatSubmitButton">Send</button>
+              <button className="chatSubmitButton" onClick={sendMessage}>Send</button>
             </div>
           </div>
         </div>
