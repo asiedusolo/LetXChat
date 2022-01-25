@@ -17,6 +17,16 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+}
+
+.noMessages{
+    position: absolute;
+    font-size: 80px;
+    top: 30%;
+    /* text-align: center; */
+    color: grey;
+    font-weight: 400px;
 }
 
 .chatBoxTop{

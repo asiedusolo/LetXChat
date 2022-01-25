@@ -100,7 +100,7 @@ const ChatPage = () => {
         <div className="chatBox">
           <div className="chatBoxWrapper">
             <div className="chatBoxTop">
-              {currentChatRoomMessages.map((message) => {
+              {currentChatRoomMessages.length > 0 ?  currentChatRoomMessages.map((message) => {
                 return (
                   <div key={message._id} ref={scrollRef}>
                     <Message
@@ -110,7 +110,8 @@ const ChatPage = () => {
                     />
                   </div>
                 );
-              })}
+              }) :
+              <span className="noMessages">Click on a card to access chat messages</span>}
             </div>
             <div className="chatBoxBottom">
               <button className="chatAttatchment">Attachment</button>
