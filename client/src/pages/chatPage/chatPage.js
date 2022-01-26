@@ -16,23 +16,39 @@ const ChatPage = () => {
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
+  const [arrivalMessage, setArrivalMessage] = useState(null);
   const socket = useRef();
   const scrollRef = useRef(null);
   console.log(chatRooms);
   useEffect(() => {
     socket.current = io("http://localhost:8900");
+    socket.current.on("receiveMessage", (arrivingMessage) => {
+      setArrivalMessage({
+        chatRoomId: arrivingMessage.chatRoomId,
+        senderId: arrivingMessage.senderId,
+        senderUsername: arrivingMessage.senderUsername,
+        text: arrivingMessage.text,
+        status: false,
+        createdAt: Date.now(),
+      });
+    });
   }, []);
+
+  useEffect(() => {
+    arrivalMessage &&
+      currentChatRoom.chatRoomId === arrivalMessage.chatRoomId &&
+      setCurrentChatRoomMessages((prev) => [...prev, arrivalMessage]);
+  }, [arrivalMessage, currentChatRoom]);
 
   useEffect(() => {
     if (chatRooms.length > 0) {
       socket.current.emit("addChatRooms", user._id, chatRooms);
-      socket.current.emit("sendCurrentUser", user._id)
+      socket.current.emit("sendCurrentUser", user._id);
       socket.current.on("getUsersChatRooms", (usersChatRooms) => {
         console.log("UserChatRooms", usersChatRooms);
       });
     }
   }, [chatRooms, user._id]);
-
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
@@ -74,6 +90,14 @@ const ChatPage = () => {
         text: newMessage,
       };
 
+      const socketNewMessage = {
+        chatRoomId: currentChatRoom._id,
+        chatRoomName: currentChatRoom.chatRoomName,
+        senderId: user._id,
+        senderUsername: user.username,
+        text: newMessage,
+      };
+
       try {
         const messageSent = await axios.post(
           "http://localhost:5000/api/messages",
@@ -83,6 +107,7 @@ const ChatPage = () => {
           ...currentChatRoomMessages,
           messageSent.data,
         ]);
+        socket.current.emit("sendMessage", socketNewMessage);
         setNewMessage("");
       } catch (error) {
         console.log(error);
