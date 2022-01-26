@@ -1,4 +1,4 @@
-const {instrument} = require('@socket.io/admin-ui')
+const { instrument } = require("@socket.io/admin-ui");
 
 const io = require("socket.io")(8900, {
   cors: {
@@ -37,20 +37,33 @@ io.on("connection", (socket) => {
     let userConnectedChatRoom = allConnectedChatRooms.filter(
       (userChatRoom) => userChatRoom.userId === userId
     );
-      console.log(userConnectedChatRoom[0].chatRooms);
-      userConnectedChatRoom[0].chatRooms.forEach((chatRoom) => {
-          socket.join(chatRoom.chatRoomName)
-      })
-      
+    console.log(userConnectedChatRoom[0].chatRooms);
+    userConnectedChatRoom[0].chatRooms.forEach((chatRoom) => {
+      socket.join(chatRoom.chatRoomName);
+    });
   });
 
-//   socket.on("disconnect", () => {
-//     // console.log("user disconnected")
-//     removeUser(socket.id);
-//     io.emit("getUsersChatRooms", allConnectedChatRooms);
-//   });
+  //send a message to other members in chat room
+  socket.on(
+    "sendMessage",
+    ({ senderId, senderUsername, chatRoomId, chatRoomName, text }) => {
+      socket
+        .to(chatRoomName)
+        .emit("receiveMessage", {
+          senderId,
+          senderUsername,
+          chatRoomId,
+          chatRoomName,
+          text,
+        });
+    }
+  );
+
+  //   socket.on("disconnect", () => {
+  //     // console.log("user disconnected")
+  //     removeUser(socket.id);
+  //     io.emit("getUsersChatRooms", allConnectedChatRooms);
+  //   });
 });
 
-
-
-instrument(io, {auth: false})
+instrument(io, { auth: false });
