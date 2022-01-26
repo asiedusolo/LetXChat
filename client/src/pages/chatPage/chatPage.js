@@ -7,7 +7,7 @@ import { useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import "./chatPage.css";
-import {io} from 'socket.io-client'
+import { io } from "socket.io-client";
 
 const ChatPage = () => {
   const { user } = useContext(AuthContext);
@@ -16,10 +16,22 @@ const ChatPage = () => {
   const [currentChatRoomMembers, setCurrentChatRoomMembers] = useState([]);
   const [currentChatRoomMessages, setCurrentChatRoomMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const [socket, setSocket] = useState(null)
-  const scrollRef = useRef(null)
+  const socket = useRef();
+  const scrollRef = useRef(null);
+  console.log(chatRooms);
+  useEffect(() => {
+    socket.current = io("http://localhost:8900");
+  }, []);
 
-  console.log(currentChatRoom._id);
+  useEffect(() => {
+    if (chatRooms.length > 0) {
+      socket.current.emit("addChatRooms", user._id, chatRooms);
+      socket.current.emit("sendCurrentUser", user._id)
+      socket.current.on("getUsersChatRooms", (usersChatRooms) => {
+        console.log("UserChatRooms", usersChatRooms);
+      });
+    }
+  }, [chatRooms, user._id]);
 
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
@@ -27,7 +39,6 @@ const ChatPage = () => {
         `http://localhost:5000/api/messages/${currentChatRoom._id}`
       );
       setCurrentChatRoomMessages(response.data);
-      console.log("CRM", response.data);
     };
     getCurrentChatRoomMessages();
   }, [currentChatRoom._id]);
@@ -38,7 +49,6 @@ const ChatPage = () => {
           `http://localhost:5000/api/chatRooms/${user._id}`
         );
         setChatRooms(response.data);
-        console.log(response.data);
       } catch (error) {
         console.log(error);
       }
@@ -51,8 +61,8 @@ const ChatPage = () => {
   };
 
   useEffect(() => {
-    scrollRef.current?.scrollIntoView({behaviour: "smooth"})
-  }, [currentChatRoomMessages])
+    scrollRef.current?.scrollIntoView({ behaviour: "smooth" });
+  }, [currentChatRoomMessages]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -83,7 +93,7 @@ const ChatPage = () => {
     <div>
       <Topbar />
       <div className="chatPage">
-        <div class="chatRooms">
+        <div className="chatRooms">
           <div className="chatRoomsWrapper">
             <input placeholder="Search for Rooms" className="chatRoomsSearch" />
             {chatRooms.map((chatRoom) => {
@@ -102,18 +112,23 @@ const ChatPage = () => {
         <div className="chatBox">
           <div className="chatBoxWrapper">
             <div className="chatBoxTop">
-              {currentChatRoomMessages.length > 0 ?  currentChatRoomMessages.map((message) => {
-                return (
-                  <div key={message._id} ref={scrollRef}>
-                    <Message
-                      {...message}
-                      user={user}
-                      ownMessage={user._id === message.senderId}
-                    />
-                  </div>
-                );
-              }) :
-              <span className="noMessages">Open a chat room to access chat messages</span>}
+              {currentChatRoomMessages.length > 0 ? (
+                currentChatRoomMessages.map((message) => {
+                  return (
+                    <div key={message._id} ref={scrollRef}>
+                      <Message
+                        {...message}
+                        user={user}
+                        ownMessage={user._id === message.senderId}
+                      />
+                    </div>
+                  );
+                })
+              ) : (
+                <span className="noMessages">
+                  Open a chat room to access chat messages
+                </span>
+              )}
             </div>
             <div className="chatBoxBottom">
               <button className="chatAttatchment">Attachment</button>
@@ -131,10 +146,16 @@ const ChatPage = () => {
         </div>
         <div className="chatDetails">
           <div className="chatDetailsWrapper">
-            {currentChatRoom.chatRoomName ? <ChatDetails
-              currentChatRoom={currentChatRoom}
-              currentChatRoomMembers={currentChatRoomMembers}
-            />: <div className="noCurrentChat">Click on a chat room to display chat details</div>}
+            {currentChatRoom.chatRoomName ? (
+              <ChatDetails
+                currentChatRoom={currentChatRoom}
+                currentChatRoomMembers={currentChatRoomMembers}
+              />
+            ) : (
+              <div className="noCurrentChat">
+                Click on a chat room to display chat details
+              </div>
+            )}
           </div>
         </div>
       </div>
