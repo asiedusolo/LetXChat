@@ -19,7 +19,7 @@ const ChatPage = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const socket = useRef();
   const scrollRef = useRef(null);
-  console.log(chatRooms);
+  // console.log(chatRooms);
   useEffect(() => {
     socket.current = io("http://localhost:8900");
     socket.current.on("receiveMessage", (arrivingMessage) => {
@@ -33,12 +33,15 @@ const ChatPage = () => {
       });
     });
   }, []);
-
+  console.log("ChatRooms", chatRooms);
+  console.log("Arrival Message", arrivalMessage);
+  console.log("Current Room Messages", currentChatRoomMessages);
+  console.log("CCR", currentChatRoom);
   useEffect(() => {
     arrivalMessage &&
-      currentChatRoom.chatRoomId === arrivalMessage.chatRoomId &&
+      currentChatRoom.chatRoomId !== arrivalMessage.chatRoomId &&
       setCurrentChatRoomMessages((prev) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentChatRoom]);
+  }, [arrivalMessage, currentChatRoom.chatRoomId]);
 
   useEffect(() => {
     if (chatRooms.length > 0) {
@@ -97,7 +100,7 @@ const ChatPage = () => {
         senderUsername: user.username,
         text: newMessage,
       };
-
+      socket.current.emit("sendMessage", socketNewMessage);
       try {
         const messageSent = await axios.post(
           "http://localhost:5000/api/messages",
@@ -107,7 +110,7 @@ const ChatPage = () => {
           ...currentChatRoomMessages,
           messageSent.data,
         ]);
-        socket.current.emit("sendMessage", socketNewMessage);
+
         setNewMessage("");
       } catch (error) {
         console.log(error);

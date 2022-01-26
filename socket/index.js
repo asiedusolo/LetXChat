@@ -47,15 +47,13 @@ io.on("connection", (socket) => {
   socket.on(
     "sendMessage",
     ({ senderId, senderUsername, chatRoomId, chatRoomName, text }) => {
-      socket
-        .to(chatRoomName)
-        .emit("receiveMessage", {
-          senderId,
-          senderUsername,
-          chatRoomId,
-          chatRoomName,
-          text,
-        });
+      socket.to(chatRoomName).emit("receiveMessage", {
+        senderId,
+        senderUsername,
+        chatRoomId,
+        chatRoomName,
+        text,
+      });
     }
   );
 
