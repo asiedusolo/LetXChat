@@ -32,7 +32,8 @@ const ChatPage = () => {
         createdAt: Date.now(),
       });
     });
-  }, []);
+    chatRooms && socket.current.emit("join-room", chatRooms.map((chatRoom) => chatRoom.chatRoomName))
+  }, [chatRooms]);
   console.log("ChatRooms", chatRooms);
   console.log("Arrival Message", arrivalMessage);
   console.log("Current Room Messages", currentChatRoomMessages);
@@ -46,7 +47,7 @@ const ChatPage = () => {
   useEffect(() => {
     if (chatRooms.length > 0) {
       socket.current.emit("addChatRooms", user._id, chatRooms);
-      socket.current.emit("sendCurrentUser", user._id);
+      // socket.current.emit("sendCurrentUser", user._id);
       socket.current.on("getUsersChatRooms", (usersChatRooms) => {
         console.log("UserChatRooms", usersChatRooms);
       });
