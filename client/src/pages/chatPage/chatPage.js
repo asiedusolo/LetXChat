@@ -38,10 +38,10 @@ const ChatPage = () => {
   console.log("Current Room Messages", currentChatRoomMessages);
   console.log("CCR", currentChatRoom);
   useEffect(() => {
-    arrivalMessage &&
-      currentChatRoom.chatRoomId !== arrivalMessage.chatRoomId &&
+    arrivalMessage && user._id !== arrivalMessage.senderId &&
+      currentChatRoom._id === arrivalMessage.chatRoomId &&
       setCurrentChatRoomMessages((prev) => [...prev, arrivalMessage]);
-  }, [arrivalMessage, currentChatRoom.chatRoomId]);
+  }, [arrivalMessage, currentChatRoom._id, user._id]);
 
   useEffect(() => {
     if (chatRooms.length > 0) {
