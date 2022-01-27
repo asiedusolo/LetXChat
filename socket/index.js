@@ -37,7 +37,7 @@ io.on("connection", (socket) => {
     let userConnectedChatRoom = allConnectedChatRooms.filter(
       (userChatRoom) => userChatRoom.userId === userId
     );
-    console.log(userConnectedChatRoom[0].chatRooms);
+    // console.log(userConnectedChatRoom[0].chatRooms);
     userConnectedChatRoom[0].chatRooms.forEach((chatRoom) => {
       socket.join(chatRoom.chatRoomName);
     });
