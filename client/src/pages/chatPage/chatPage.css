@@ -37,6 +37,7 @@
 }
 
 .chatBoxBottom {
+  margin-bottom: 10px;
   margin-top: 10px;
   display: flex;
   align-items: center;
@@ -93,4 +94,5 @@
   top: 15%;
   font-size: 30px;
   color: grey;
+  padding: 20px;
 }
