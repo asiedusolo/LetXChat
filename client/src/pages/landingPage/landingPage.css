@@ -1,55 +1,63 @@
-html{
-    margin: 0;
-    padding: 0;
-    background-color: rgb(206, 106, 12);
-    height: 100vh;
-
+html {
+  /* margin: 0;
+  padding: 0; */
+  background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ZpEPZ_Xpqqn0HkEzLHveE-Jazbhu7Vpg6g&usqp=CAU");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
 }
 
-
-.landingPage{
-    /* height: 100vh; */
+.logo,
+.description,
+.briefInfo,
+.btns-container {
+  margin-left: 15%;
 }
 
-
-.logo, .description, .briefInfo, .btns-container{
-    margin-left: 15%;
+.logo {
+  margin-top: 50px;
+  color: black;
 }
 
-.logo{
-    margin-top: 50px;
-    color: white;
-}
-
-
-.description{
+.description {
   margin-top: 100px;
+  font-size: 70px;
+  width: 500px;
+  text-transform: uppercase;
+}
+
+.descPart {
+  color: rgb(206, 106, 12);
+}
+
+.briefInfo {
+  margin-top: 80px;
   font-size: 28px;
+  width: 1000px;
 }
 
-.briefInfo{
-    margin-top: 50px;
-    font-size: 30px;
-    width: 1000px;
+.btns-container {
+  margin-top: 80px;
 }
 
-.btns-container{
-    margin-top: 50px;
+.signup,
+.login {
+  padding: 15px 40px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 50px;
 }
 
-.signup, .login{
-    padding: 15px 40px;
-    border: none;
-    border-radius: 10px;
-    margin-right: 50px;
+.regLink,
+.regLogin {
+  text-decoration: none;
+  color: rgb(206, 106, 12);
+  font-size: 18px;
+  text-transform: uppercase;
+  font-weight: 300;
 }
 
-.regLink, .regLogin{
-    text-decoration: none;
-    color: black;
-    font-size: 18px;
-}
-
-.regLink:hover, .regLogin: hover{
-    
+.regLink:hover,
+.regLogin:hover {
 }

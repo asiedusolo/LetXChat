@@ -1,29 +1,32 @@
-
-.chatDetails{
-    height: 100%;
-    overflow: hidden;
+.chatDetails {
+  height: 100%;
+  overflow: hidden;
 }
 
-.memberList{
-    margin-top: 50px;
-    height: 70%;
-    overflow-y: scroll;
+.chatRoomMeta,
+.memberList {
+  padding: 20px;
 }
 
-.memberList .member{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    
+.memberList {
+  margin-top: 50px;
+  height: 70%;
+  overflow-y: scroll;
 }
 
-.memberImg{
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
+.memberList .member {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.memberName{
-    margin-left: 20px;
+.memberImg {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.memberName {
+  margin-left: 20px;
 }

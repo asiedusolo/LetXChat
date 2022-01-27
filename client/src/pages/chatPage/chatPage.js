@@ -29,17 +29,22 @@ const ChatPage = () => {
         senderUsername: arrivingMessage.senderUsername,
         text: arrivingMessage.text,
         status: false,
-        createdAt: Date.now(),
+        createdAt: Date.now()
       });
     });
-    chatRooms && socket.current.emit("join-room", chatRooms.map((chatRoom) => chatRoom.chatRoomName))
+    chatRooms &&
+      socket.current.emit(
+        "join-room",
+        chatRooms.map((chatRoom) => chatRoom.chatRoomName)
+      );
   }, [chatRooms]);
   console.log("ChatRooms", chatRooms);
   console.log("Arrival Message", arrivalMessage);
   console.log("Current Room Messages", currentChatRoomMessages);
   console.log("CCR", currentChatRoom);
   useEffect(() => {
-    arrivalMessage && user._id !== arrivalMessage.senderId &&
+    arrivalMessage &&
+      user._id !== arrivalMessage.senderId &&
       currentChatRoom._id === arrivalMessage.chatRoomId &&
       setCurrentChatRoomMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage, currentChatRoom._id, user._id]);
@@ -91,7 +96,7 @@ const ChatPage = () => {
         chatRoomId: currentChatRoom._id,
         senderId: user._id,
         senderUsername: user.username,
-        text: newMessage,
+        text: newMessage
       };
 
       const socketNewMessage = {
@@ -99,7 +104,7 @@ const ChatPage = () => {
         chatRoomName: currentChatRoom.chatRoomName,
         senderId: user._id,
         senderUsername: user.username,
-        text: newMessage,
+        text: newMessage
       };
       socket.current.emit("sendMessage", socketNewMessage);
       try {
@@ -109,7 +114,7 @@ const ChatPage = () => {
         );
         setCurrentChatRoomMessages([
           ...currentChatRoomMessages,
-          messageSent.data,
+          messageSent.data
         ]);
 
         setNewMessage("");
@@ -165,6 +170,7 @@ const ChatPage = () => {
                 className="chatMessageInput"
                 placeholder="Type your message here"
                 value={newMessage}
+                style={{ height: 18 }}
                 onChange={(e) => setNewMessage(e.target.value)}
               ></textarea>
               <button className="chatSubmitButton" onClick={sendMessage}>
