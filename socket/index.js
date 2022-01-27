@@ -31,18 +31,6 @@ io.on("connection", (socket) => {
     io.emit("getUsersChatRooms", allConnectedChatRooms);
   });
 
-  // socket.on("sendCurrentUser", (userId) => {
-  //   console.log(userId);
-  //   //join user with current socketId to his or chatRooms
-  //   let userConnectedChatRoom = allConnectedChatRooms.filter(
-  //     (userChatRoom) => userChatRoom.userId === userId
-  //   );
-  //   // console.log(userConnectedChatRoom[0].chatRooms);
-  //   userConnectedChatRoom[0].chatRooms.forEach((chatRoom) => {
-  //     socket.join(chatRoom.chatRoomName);
-  //   });
-  // });
-
   socket.on("join-room", (chatRooms) => {
     socket.join(chatRooms)
   })
