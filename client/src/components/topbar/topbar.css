@@ -6,13 +6,32 @@
 }
 
 .profileSection {
+  width: 100%;
   position: absolute;
   margin-top: 10px;
   right: 20px;
+  display: flex;
+  justify-content: space-between;
 }
-.imgContainer img {
+
+.chatLogo {
+  width: 10%;
+  display: flex;
+  justify-content: center;
+}
+.userContainer {
+  width: 10%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.userContainer {
+  font-weight: 400;
+}
+.userContainer img {
   width: 50px;
   height: 50px;
   border-radius: 50%;
   object-fit: cover;
+  margin-left: 10px;
 }
