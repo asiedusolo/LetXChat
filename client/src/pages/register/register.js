@@ -1,9 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
-import Modal from "./Modal";
-import {Link} from "react-router-dom"
-
+// import Modal from "./Modal";
+import { Link } from "react-router-dom";
+import "./register.css";
 
 const Register = () => {
   const fullNameRef = useRef(null);
@@ -14,8 +14,8 @@ const Register = () => {
   const passwordConfirmRef = useRef(null);
   const history = useHistory();
 
-  const [isValidUser, setIsValidUser] = useState();
-  const [showModal, setShowModal] = useState(false);
+  // const [isValidUser, setIsValidUser] = useState();
+  // const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,94 +27,109 @@ const Register = () => {
         employee_id: emloyeeIdRef.current.value,
         username: usernameRef.current.value,
         staff_email: staffEmailRef.current.value,
-        password: passwordRef.current.value,
+        password: passwordRef.current.value
       };
       try {
         await axios.post("http://localhost:5000/api/auth/register", newUser);
-        setIsValidUser(true);
-        setShowModal(true)
+        // setIsValidUser(true);
+        // setShowModal(true);
         history.push("/login");
       } catch (error) {
-        setIsValidUser(false);
-        setShowModal(true)
+        // setIsValidUser(false);
+        // setShowModal(true);
         console.log(error);
       }
     }
   };
 
-  const hideModal = () => {
-    setShowModal(false);
-  };
+  // const hideModal = () => {
+  //   // setShowModal(false);
+  // };
   return (
-    <div>
-      <div>
+    <div className="registerContainer">
+      <div className="registerMessage">
         <h3>Enter your details to sign up on LetXChat</h3>
       </div>
-      <div>
+      {/* <div className="registerModal">
         {showModal && <Modal isValidUser={isValidUser} hideModal={hideModal} />}
-      </div>
-      <div>
-        <form onSubmit={handleSubmit}>
-          <label htmlFor="fullname">Full Name: </label>
-          <input
-            type="text"
-            name="fullname"
-            ref={fullNameRef}
-            placeholder="Full Name"
-            required
-          />
+      </div> */}
+      <div className="registerFormContainer">
+        <form onSubmit={handleSubmit} className="registerForm">
+          <div>
+            <input
+              type="text"
+              name="fullname"
+              ref={fullNameRef}
+              placeholder="Full Name"
+              required
+            />
+          </div>
+          <div>
+            <br />
+
+            <input
+              type="text"
+              name="employeeId"
+              ref={emloyeeIdRef}
+              placeholder="Employee ID"
+              required
+            />
+          </div>
           <br />
-          <label htmlFor="employeeId">Employee ID: </label>
-          <input
-            type="text"
-            name="employeeId"
-            ref={emloyeeIdRef}
-            placeholder="Employee ID"
-            required
-          />
+          <div>
+            <input
+              type="text"
+              name="username"
+              ref={usernameRef}
+              minLength="3"
+              maxLength="20"
+              placeholder="Username"
+              required
+            />
+          </div>
           <br />
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            name="username"
-            ref={usernameRef}
-            minLength="3"
-            maxLength="20"
-            placeholder="Username"
-            required
-          />
+          <div>
+            <input
+              type="email"
+              name="staffEmail"
+              maxLength="50"
+              ref={staffEmailRef}
+              placeholder="staffEmail"
+              required
+            />
+          </div>
           <br />
-          <label htmlFor="staffEmail">Staff Email:</label>
-          <input
-            type="email"
-            name="staffEmail"
-            maxLength="50"
-            ref={staffEmailRef}
-            placeholder="staffEmail"
-            required
-          />
+          <div>
+            <input
+              type="password"
+              name="password"
+              ref={passwordRef}
+              minLength="6"
+              placeholder="Enter Password"
+              required
+            />
+          </div>
           <br />
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            name="password"
-            ref={passwordRef}
-            minLength="6"
-            placeholder="Enter Password"
-            required
-          />
+          <div>
+            <input
+              type="password"
+              name="passwordConfirm"
+              ref={passwordConfirmRef}
+              placeholder="Confirm Password"
+              required
+            />
+          </div>
           <br />
-          <label htmlFor="passwordConfirm">Password Confirm:</label>
-          <input
-            type="password"
-            name="passwordConfirm"
-            ref={passwordConfirmRef}
-            placeholder="Confirm Password"
-            required
-          />
-          <br />
-          <button type="submit">Sign up</button>
-          <button><Link to="/login">Log into Account</Link></button>
+          <div>
+            <button type="submit" className="regSignup regLink">
+              Sign up
+            </button>
+            <button className="alreadyAccountlogin">
+              <Link to="/login" className="regLogin">
+                Log into Account
+              </Link>
+            </button>
+          </div>
         </form>
       </div>
     </div>

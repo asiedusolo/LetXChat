@@ -1,92 +1,98 @@
-.chatPage{
-    height: calc(100vh - 70px);
-    display: flex;
-
+.chatPage {
+  height: calc(100vh - 70px);
+  display: flex;
+  margin-bottom: 0px;
 }
 
-
-.chatRooms{
-    flex: 2.5;
+.chatRooms {
+  flex: 2.5;
+  height: inherit;
 }
 
-.chatBox{
-    flex: 7.5;
+.chatBox {
+  flex: 7.5;
+  height: inherit;
 }
 
-.chatBoxWrapper{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    position: relative;
+.chatBoxWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
 }
 
-.noMessages{
-    position: absolute;
-    font-size: 80px;
-    top: 10%;
-    /* text-align: center; */
-    color: grey;
-    font-weight: 400px;
+.noMessages {
+  position: absolute;
+  font-size: 80px;
+  top: 10%;
+  /* text-align: center; */
+  color: grey;
+  font-weight: 400px;
 }
 
-.chatBoxTop{
-    height: 100%;
-    overflow-y: scroll;
-    padding-right: 10px;
+.chatBoxTop {
+  height: 100%;
+  overflow-y: scroll;
+  padding-right: 10px;
 }
 
-.chatBoxBottom{
-    margin-top:10px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.chatBoxBottom {
+  margin-bottom: 10px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.chatMessageInput{
-    width: 80%;
-    height: 90px;
-    padding: 10px;
+.chatMessageInput {
+  width: 80%;
+  height: 90px;
+  padding: 10px;
 }
 
-.chatSubmitButton{
-    width: 70px;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
+.chatSubmitButton {
+  width: 70px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
 }
 
-.chatAttatchment{
-    width: 90px;
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
-    cursor: pointer;
+.chatAttatchment {
+  width: 90px;
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  cursor: pointer;
 }
-.chatDetails{
-    flex: 2.5;
-}
-
-.chatRoomsSearch{
-    width: 90%;
-    padding: 10px 0;
-    border: none;
-    border-bottom: 1px solid grey;
+.chatDetails {
+  flex: 2.5;
+  height: inherit;
 }
 
-.chatRoomsWrapper, .chatBoxWrapper, .chatDetailsWrapper{
-    padding: 10px;
-    height: 100%;
-    background-color: white;
+.chatRoomsSearch {
+  width: 90%;
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid grey;
 }
 
-.chatDetailsWrapper{
-    position: relative;
+.chatRoomsWrapper,
+.chatBoxWrapper,
+.chatDetailsWrapper {
+  /* padding: 10px 10px 0px 10px; */
+  height: 100%;
+  background-color: white;
 }
 
-.noCurrentChat{
-    position: absolute;
-    top: 15%;
-    font-size: 30px;
-    color: grey;
+.chatDetailsWrapper {
+  position: relative;
+}
+
+.noCurrentChat {
+  position: absolute;
+  top: 15%;
+  font-size: 30px;
+  color: grey;
+  padding: 20px;
 }

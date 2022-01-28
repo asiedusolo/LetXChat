@@ -1,0 +1,47 @@
+.registerContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+}
+
+.registerMessage {
+  margin-bottom: 50px;
+}
+.registerMessage h3 {
+  font-size: 30px;
+  color: black;
+}
+
+.registerFormContainer {
+  width: 400px;
+}
+
+.registerForm {
+  width: 100%;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+}
+
+.regSignup {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 20px;
+}
+
+.alreadyAccountlogin {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 20px;
+}

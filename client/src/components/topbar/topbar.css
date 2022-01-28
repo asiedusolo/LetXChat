@@ -1,19 +1,18 @@
-.topbar{
-    height: 70px;
-    width: 100%;
-    background-color: rgb(206, 106, 12);
-    position: relative;
+.topbar {
+  height: 70px;
+  width: 100%;
+  background-color: #00bfb2;
+  position: relative;
 }
 
-.profileSection{
-    position: absolute;
-    margin-top: 10px;
-    right: 20px;
+.profileSection {
+  position: absolute;
+  margin-top: 10px;
+  right: 20px;
 }
-.imgContainer img{
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
+.imgContainer img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
 }
-
