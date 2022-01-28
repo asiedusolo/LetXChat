@@ -20,6 +20,12 @@ const ChatPage = () => {
   const socket = useRef();
   const scrollRef = useRef(null);
   // console.log(chatRooms);
+
+  useEffect(() => {
+    window.onpopstate = () => {
+      console.log("Back button pressed");
+    };
+  });
   useEffect(() => {
     socket.current = io("http://localhost:8900");
     socket.current.on("receiveMessage", (arrivingMessage) => {
