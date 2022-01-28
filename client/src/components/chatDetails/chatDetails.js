@@ -2,16 +2,19 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./chatDetails.css";
 
-
-
 const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
-    const [chatCreator, setChatCreator] = useState("");
-    const [usersInfo, setUsersInfo] = useState([])
+  const [chatCreator, setChatCreator] = useState("");
+  const [usersInfo, setUsersInfo] = useState([]);
 
-    useEffect(() => {
-        axios.all(currentChatRoomMembers.map((member) => axios.get(`http://localhost:5000/api/user?userId=${member}`))).then((response) => setUsersInfo(response.map((d) => d.data)))
-        
-    }, [currentChatRoomMembers]);
+  useEffect(() => {
+    axios
+      .all(
+        currentChatRoomMembers.map((member) =>
+          axios.get(`http://localhost:5000/api/user?userId=${member}`)
+        )
+      )
+      .then((response) => setUsersInfo(response.map((d) => d.data)));
+  }, [currentChatRoomMembers]);
   useEffect(() => {
     const getChatCreator = async () => {
       const response = await axios.get(

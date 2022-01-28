@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router";
 // import Modal from "./Modal";
@@ -16,6 +16,21 @@ const Register = () => {
 
   // const [isValidUser, setIsValidUser] = useState();
   // const [showModal, setShowModal] = useState(false);
+  const [chatRoomIds, setChatRoomIds] = useState([]);
+
+  useEffect(() => {
+    const fetchChatRooms = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/chatRooms");
+        // console.log(response.data.map((chatroom) => chatroom._id));
+        setChatRoomIds(response.data.map((chatroom) => chatroom._id));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchChatRooms();
+  }, []);
+  console.log(chatRoomIds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -30,9 +45,40 @@ const Register = () => {
         password: passwordRef.current.value
       };
       try {
-        await axios.post("http://localhost:5000/api/auth/register", newUser);
+        const response = await axios.post(
+          "http://localhost:5000/api/auth/register",
+          newUser
+        );
         // setIsValidUser(true);
         // setShowModal(true);
+        const allChatRoomIds = chatRoomIds;
+        const randomInt =
+          Math.floor(Math.random() * (allChatRoomIds.length - 1 - 3 + 1)) + 3;
+        function getRandomSubarray(arr, size) {
+          var shuffled = arr.slice(0),
+            i = arr.length,
+            temp,
+            index;
+          while (i--) {
+            index = Math.floor((i + 1) * Math.random());
+            temp = shuffled[index];
+            shuffled[index] = shuffled[i];
+            shuffled[i] = temp;
+          }
+          return shuffled.slice(0, size);
+        }
+        const subArray = getRandomSubarray(allChatRoomIds, randomInt);
+        await axios
+          .all(
+            subArray.map((member) =>
+              axios.put(
+                `http://localhost:5000/api/chatRooms/${member}/${response.data._id}`
+              )
+            )
+          )
+          .then((response) => console.log("Joined chat rooms select"));
+        console.log(response.data._id);
+
         history.push("/login");
       } catch (error) {
         // setIsValidUser(false);
