@@ -1,0 +1,43 @@
+.loginContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: space-between;
+}
+
+.login {
+  padding: 15px 40px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 50px;
+}
+
+.loginMessage {
+  margin-bottom: 50px;
+}
+
+.loginMessage h3 {
+  font-size: 30px;
+  color: black;
+}
+
+.loginFormContainer {
+  width: 400px;
+}
+
+.loginEmailField,
+.loginPasswordField {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+}
+
+.loginSignup {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 20px;
+}

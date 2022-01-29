@@ -23,9 +23,9 @@
   width: 100%;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
+.registerTextField,
+.registerEmailField,
+.registerPasswordField {
   padding: 10px;
   width: 100%;
   border-radius: 5px;

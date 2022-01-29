@@ -107,6 +107,7 @@ const Register = () => {
               name="fullname"
               ref={fullNameRef}
               placeholder="Full Name"
+              className="registerTextField"
               required
             />
           </div>
@@ -118,6 +119,7 @@ const Register = () => {
               name="employeeId"
               ref={emloyeeIdRef}
               placeholder="Employee ID"
+              className="registerTextField"
               required
             />
           </div>
@@ -130,6 +132,7 @@ const Register = () => {
               minLength="3"
               maxLength="20"
               placeholder="Username"
+              className="registerTextField"
               required
             />
           </div>
@@ -141,6 +144,7 @@ const Register = () => {
               maxLength="50"
               ref={staffEmailRef}
               placeholder="staffEmail"
+              className="registerEmailField"
               required
             />
           </div>
@@ -152,6 +156,7 @@ const Register = () => {
               ref={passwordRef}
               minLength="6"
               placeholder="Enter Password"
+              className="registerPasswordField"
               required
             />
           </div>
@@ -162,6 +167,7 @@ const Register = () => {
               name="passwordConfirm"
               ref={passwordConfirmRef}
               placeholder="Confirm Password"
+              className="registerPasswordField"
               required
             />
           </div>

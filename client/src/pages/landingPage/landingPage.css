@@ -1,6 +1,4 @@
 html {
-  /* margin: 0;
-  padding: 0; */
   background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS6ZpEPZ_Xpqqn0HkEzLHveE-Jazbhu7Vpg6g&usqp=CAU");
   background-repeat: no-repeat;
   background-position: center;
@@ -8,41 +6,41 @@ html {
   height: 100vh;
 }
 
-.logo,
-.description,
-.briefInfo,
-.btns-container {
+.landingLogo,
+.landingDescription,
+.landingBriefInfo,
+.landing-btns-container {
   margin-left: 15%;
 }
 
-.logo {
+.landingLogo {
   margin-top: 50px;
   color: black;
 }
 
-.description {
+.landingDescription {
   margin-top: 100px;
   font-size: 70px;
   width: 500px;
   text-transform: uppercase;
 }
 
-.descPart {
+.landingDescPart {
   color: white;
 }
 
-.briefInfo {
+.landingBriefInfo {
   margin-top: 80px;
   font-size: 28px;
   width: 1000px;
 }
 
-.btns-container {
+.landing-btns-container {
   margin-top: 80px;
 }
 
-.signup,
-.login {
+.landingSignup,
+.landingLogin {
   padding: 15px 40px;
   border: none;
   border-radius: 10px;
@@ -50,7 +48,7 @@ html {
 }
 
 .regLink,
-.regLogin {
+.landingRegLink {
   text-decoration: none;
   color: rgb(206, 106, 12);
   font-size: 18px;
@@ -59,5 +57,5 @@ html {
 }
 
 /* .regLink:hover,
-.regLogin:hover {
+.landingRegLink:hover {
 } */

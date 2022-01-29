@@ -4,6 +4,7 @@ import Modal from "./modal";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import LoginCall from "./loginAPICalls";
 import { Link } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
   const staffEmailRef = useRef(null);
@@ -27,12 +28,12 @@ const Login = () => {
   //   setShowModal(false);
   // };
   return (
-    <div className="registerContainer">
-      <div className="registerMessage">
+    <div className="loginContainer">
+      <div className="loginMessage">
         <h1>Enter your details to login</h1>
       </div>
       {/* <div>{showModal && <Modal hideModal={hideModal} />}</div> */}
-      <div className="registerFormContainer">
+      <div className="loginFormContainer">
         <form onSubmit={handleLogin}>
           <div>
             <input
@@ -40,6 +41,7 @@ const Login = () => {
               name="staffEmail"
               ref={staffEmailRef}
               placeholder="Staff Email"
+              className="loginEmailField"
               required
             />
           </div>
@@ -50,6 +52,7 @@ const Login = () => {
               name="password"
               ref={passwordRef}
               placeholder="Password"
+              className="loginPasswordField"
               minLength="6"
               required
             />
@@ -59,7 +62,7 @@ const Login = () => {
             {isFetchingUser ? "Logging in..." : "Login"}
           </button>
           {error && (
-            <button>
+            <button className="loginSignup">
               <Link to="/register">Dont have an account? Sign up</Link>
             </button>
           )}
