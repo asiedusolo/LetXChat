@@ -6,6 +6,8 @@ import { AuthContext } from "../../contexts/auth/authcontext.js";
 
 const Topbar = () => {
   const { user } = useContext(AuthContext);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+
   return (
     <div className="topbar">
       <div className="profileSection">
@@ -16,8 +18,12 @@ const Topbar = () => {
           <p class="userName">{user.name}</p>
           <Link to={`/profile/${user.username}`}>
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              alt="profilePicture"
+              alt="userPicture"
+              src={
+                user && user.picture_avatar
+                  ? PF + user.picture_avatar
+                  : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+              }
             />
           </Link>
         </div>

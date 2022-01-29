@@ -99,7 +99,7 @@ const Profile = () => {
             src={
               user && user.picture_avatar
                 ? PF + `${userPicture ? userPicture : user.picture_avatar}`
-                : PF + "Screenshot from 2022-01-27 20-11-19.png"
+                : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
             }
             className="userImage"
           />
