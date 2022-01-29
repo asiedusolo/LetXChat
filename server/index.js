@@ -8,6 +8,8 @@ const messageRouter = require("./routes/messages");
 const chatRoomRouter = require("./routes/chatRooms");
 require("dotenv").config();
 const cors = require("cors");
+const path = require("path");
+const bodyParser = require("body-parser");
 
 const multer = require("multer");
 
@@ -17,6 +19,9 @@ app.use(
     extended: false
   })
 );
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/images", express.static(path.join(__dirname, "public/images")));
+
 app.use(cors());
 
 const storage = multer.diskStorage({
@@ -24,20 +29,20 @@ const storage = multer.diskStorage({
     cb(null, "public/images");
   },
   filename: (req, file, cb) => {
-    cb(null, req.body.name);
+    cb(null, Date.now() + "--" + file.originalname);
   }
 });
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
+    console.log(req.file);
     return res.status(200).json("File uploded successfully");
   } catch (error) {
     console.error(error);
   }
 });
 
-app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/messages", messageRouter);
