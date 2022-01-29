@@ -19,11 +19,14 @@ const ChatPage = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const socket = useRef();
   const scrollRef = useRef(null);
-  // console.log(chatRooms);
 
   useEffect(() => {
     window.onpopstate = () => {
-      console.log("Back button pressed");
+      alert("leaving");
+      socket.current.emit(
+        "leave-room",
+        chatRooms.map((chatRoom) => chatRoom.chatRoomName)
+      );
     };
   });
   useEffect(() => {
@@ -44,10 +47,6 @@ const ChatPage = () => {
         chatRooms.map((chatRoom) => chatRoom.chatRoomName)
       );
   }, [chatRooms]);
-  console.log("ChatRooms", chatRooms);
-  console.log("Arrival Message", arrivalMessage);
-  console.log("Current Room Messages", currentChatRoomMessages);
-  console.log("CCR", currentChatRoom);
   useEffect(() => {
     arrivalMessage &&
       user._id !== arrivalMessage.senderId &&
@@ -58,10 +57,8 @@ const ChatPage = () => {
   useEffect(() => {
     if (chatRooms.length > 0) {
       socket.current.emit("addChatRooms", user._id, chatRooms);
-      // socket.current.emit("sendCurrentUser", user._id);
-      socket.current.on("getUsersChatRooms", (usersChatRooms) => {
-        console.log("UserChatRooms", usersChatRooms);
-      });
+      socket.current.emit("sendCurrentUser", user._id);
+      socket.current.on("getUsersChatRooms", (usersChatRooms) => {});
     }
   }, [chatRooms, user._id]);
   useEffect(() => {

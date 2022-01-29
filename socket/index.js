@@ -2,8 +2,8 @@ const { instrument } = require("@socket.io/admin-ui");
 
 const io = require("socket.io")(8900, {
   cors: {
-    orgin: ["http://localhost:3000", "https://admin.socket.io/#/"],
-  },
+    orgin: ["http://localhost:3000", "https://admin.socket.io/#/"]
+  }
 });
 
 let allConnectedChatRooms = [];
@@ -15,7 +15,7 @@ const addUserChatRooms = (userId, socketId, chatRooms) => {
     allConnectedChatRooms.push({
       userId: userId,
       socketId: socketId,
-      chatRooms: chatRooms,
+      chatRooms: chatRooms
     });
 };
 
@@ -32,8 +32,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("join-room", (chatRooms) => {
-    socket.join(chatRooms)
-  })
+    socket.join(chatRooms);
+    console.log(socket.rooms);
+  });
+
+  socket.on("sendCurrentUser", (userId) => {
+    console.log(userId);
+    //join user with current socketId to his or chatRooms
+    let userConnectedChatRoom = allConnectedChatRooms.filter(
+      (userChatRoom) => userChatRoom.userId === userId
+    );
+    console.log(userConnectedChatRoom[0].chatRooms);
+    userConnectedChatRoom[0].chatRooms.forEach((chatRoom) => {
+      socket.join(chatRoom.chatRoomName);
+    });
+  });
+
+  socket.on("leave-room", (chatRooms) => {
+    socket.leave(chatRooms);
+  });
 
   //send a message to other members in chat room
   socket.on(
@@ -44,16 +61,14 @@ io.on("connection", (socket) => {
         senderUsername,
         chatRoomId,
         chatRoomName,
-        text,
+        text
       });
     }
   );
 
-  //   socket.on("disconnect", () => {
-  //     // console.log("user disconnected")
-  //     removeUser(socket.id);
-  //     io.emit("getUsersChatRooms", allConnectedChatRooms);
-  //   });
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
+  });
 });
 
 instrument(io, { auth: false });
