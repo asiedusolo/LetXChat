@@ -8,6 +8,10 @@ const Profile = () => {
   const username = useParams().username;
   const [fileData, setFileData] = useState();
   const [userPicture, setUserPicture] = useState("");
+  const [profileUserName, setProfileUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [newUsername, setNewUsername] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   useEffect(() => {
@@ -53,6 +57,38 @@ const Profile = () => {
     setFileData(e.target.files[0]);
   };
 
+  const handleUserProfileEdit = async (e) => {
+    e.preventDefault();
+    let updates;
+    if (password && password === confirmPassword && username) {
+      updates = {
+        username: profileUserName,
+        password: password
+      };
+    } else if (password && password === confirmPassword && !username) {
+      updates = {
+        password: password
+      };
+    } else if (username && !password) {
+      updates = {
+        username: profileUserName
+      };
+    }
+
+    try {
+      const response = await axios.put(
+        `http://localhost:5000/api/user/${user._id}`,
+        updates
+      );
+      setNewUsername(response.data.username);
+      setProfileUserName("");
+      alert("Details updated successfully");
+    } catch (error) {
+      console.log(error);
+      alert("Username already exists or password mismatch");
+    }
+  };
+
   return (
     <div className="profilePage">
       <div className="userProfileData">
@@ -67,7 +103,7 @@ const Profile = () => {
             }
             className="userImage"
           />
-          <h3>{user.username}</h3>
+          <h3>{newUsername ? newUsername : user.username}</h3>
           <h3>{user.staff_email}</h3>
           <form onSubmit={onSubmitHandler}>
             <input
@@ -80,19 +116,14 @@ const Profile = () => {
         </div>
       </div>
       <div className="userProfileEdit">
-        <form className="userProfileForm">
-          <input
-            type="text"
-            name="name"
-            placeholder="Full Name"
-            className="profileTextField"
-          />
-          <br />
+        <form className="userProfileForm" onSubmit={handleUserProfileEdit}>
           <input
             type="text"
             name="username"
             placeholder="Username"
             className="profileTextField"
+            value={profileUserName}
+            onChange={(e) => setProfileUserName(e.target.value)}
           />
           <br />
           <input
@@ -100,6 +131,8 @@ const Profile = () => {
             name="password"
             placeholder="Password"
             className="profilePasswordField"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <br />
           <input
@@ -107,6 +140,8 @@ const Profile = () => {
             name="confirmPassword"
             placeholder="Confirm Password"
             className="profilePasswordField"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
           />
           <br />
           <button type="submit" className="profileEditButton">

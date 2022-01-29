@@ -39,7 +39,8 @@ router.put("/:id", async (req, res) => {
         .status(404)
         .json({ msg: `No user with id ${req.params.id} found` });
     }
-    return res.status(200).json(user._doc);
+    const { password, createdAt, ...other } = user._doc;
+    return res.status(200).json(other);
   } catch (error) {
     res.status(500).json(error);
   }
