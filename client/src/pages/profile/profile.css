@@ -2,5 +2,53 @@
   padding: 15px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
+}
+
+.userProfileData {
+  width: 40%;
+  /* border: 1px solid black; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfileWrapper {
+  /* border: 1px solid green; */
+  text-align: center;
+}
+
+.userImage {
+  border-radius: 50%;
+  height: 250px;
+  width: 250px;
+  object-fit: cover;
+}
+
+.userProfileEdit {
+  width: 40%;
+  /* border: 1px solid red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.userProfileForm {
+  width: 80%;
+}
+
+.profileTextField,
+.profilePasswordField {
+  padding: 10px;
+  width: 100%;
+  border-radius: 5px;
+  border: none;
+  margin-bottom: 50px;
+}
+
+.profileEditButton {
+  padding: 15px 20px;
+  border: none;
+  border-radius: 10px;
+  margin-right: 20px;
 }
