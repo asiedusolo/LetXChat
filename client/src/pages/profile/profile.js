@@ -6,6 +6,7 @@ import "./profile.css";
 const Profile = () => {
   const [user, setUser] = useState({});
   const username = useParams().username;
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,15 +28,17 @@ const Profile = () => {
             alt="profilePic"
             src={
               user.picture_avatar
-                ? user.picture_avatar
-                : `https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png`
+                ? PF + user.picture_avatar
+                : PF + "Screenshot from 2022-01-27 20-11-19.png"
             }
             className="userImage"
           />
           <h3>{user.username}</h3>
           <h3>{user.staff_email}</h3>
-          <input type="file" name="picturePicture" />
-          <button type="submit">Upload profile</button>
+          <form>
+            <input type="file" name="picturePicture" />
+            <button type="submit">Upload profile</button>
+          </form>
         </div>
       </div>
       <div className="userProfileEdit">
