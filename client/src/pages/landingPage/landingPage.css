@@ -5,6 +5,7 @@ html {
 body {
   background: #0ece81;
   background: linear-gradient(180deg, #0ece81 68%, rgb(12, 168, 142) 100%);
+  font-family: "Montserrat", sans-serif;
 }
 
 .landingPage {
@@ -51,18 +52,22 @@ body {
   font-size: 120px;
   text-transform: uppercase;
   margin-bottom: 0px;
+  font-weight: bold;
 }
 
 .landingShareWith {
   font-size: 38px;
   margin-top: 0px;
   margin-bottom: 0px;
+  color: white;
 }
 
 .landingColleagues {
-  font-size: 45px;
+  font-size: 50px;
   margin-top: 0px;
   text-transform: capitalize;
+  color: white;
+  font-weight: bold;
 }
 
 .landingDescPart {
@@ -71,6 +76,7 @@ body {
 
 .landingBriefInfo {
   font-size: 28px;
+  color: white;
 }
 
 .landing-btns-container {
@@ -79,19 +85,19 @@ body {
 
 .landingSignup,
 .landingLogin {
-  padding: 15px 40px;
+  padding: 20px 40px;
   border: none;
   border-radius: 10px;
   margin-right: 50px;
 }
 
-.regLink,
+.landingRegLogin,
 .landingRegLink {
   text-decoration: none;
-  color: rgb(206, 106, 12);
+  color: rgb(12, 168, 142);
   font-size: 18px;
   text-transform: uppercase;
-  font-weight: 300;
+  font-weight: bold;
 }
 
 /* .regLink:hover,
