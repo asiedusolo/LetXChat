@@ -5,6 +5,7 @@ import "./chatDetails.css";
 const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
   const [chatCreator, setChatCreator] = useState("");
   const [usersInfo, setUsersInfo] = useState([]);
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   useEffect(() => {
     axios
@@ -42,7 +43,11 @@ const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
             <div key={index} className="member">
               <img
                 className="memberImg"
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                src={
+                  member.picture_avatar
+                    ? PF + member.picture_avatar
+                    : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                }
                 alt=""
               />
               <p className="memberName">{member.name}</p>
