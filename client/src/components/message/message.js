@@ -10,11 +10,6 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
       <div className={ownMessage ? "message own" : "message"}>
         <div className="messageTop">
           <div className="userDetails">
-            <img
-              className="messageImg"
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              alt=""
-            />
             <p>{senderUsername}</p>
           </div>
 
@@ -30,11 +25,6 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
       <div className={ownMessage ? "message own" : "message"}>
         <div className="messageTop">
           <div className="userDetails">
-            <img
-              className="messageImg"
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              alt=""
-            />
             <p>{senderUsername}</p>
           </div>
 
@@ -52,11 +42,6 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
       <div className={ownMessage ? "message own" : "message"}>
         <div className="messageTop">
           <div className="userDetails">
-            <img
-              className="messageImg"
-              src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              alt=""
-            />
             <p>{senderUsername}</p>
           </div>
 
@@ -74,11 +59,6 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
     <div className={ownMessage ? "message own" : "message"}>
       <div className="messageTop">
         <div className="userDetails">
-          <img
-            className="messageImg"
-            src="https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-            alt=""
-          />
           <p>{senderUsername}</p>
         </div>
 
