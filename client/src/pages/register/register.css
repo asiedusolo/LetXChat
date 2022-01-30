@@ -2,21 +2,27 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-evenly;
   align-items: center;
-  align-content: space-between;
 }
 
 .registerMessage {
-  margin-bottom: 50px;
+  margin-bottom: 0px;
 }
 .registerMessage h3 {
-  font-size: 30px;
-  color: black;
+  font-size: 40px;
+  color: white;
+  margin-bottom: 0px;
 }
 
+.registerLogo {
+  align-self: flex-start;
+  margin-left: 50px;
+  margin-top: 0px;
+}
 .registerFormContainer {
   width: 400px;
+  margin-top: 0px;
 }
 
 .registerForm {
@@ -28,15 +34,33 @@
 .registerPasswordField {
   padding: 10px;
   width: 100%;
+  height: 32px;
   border-radius: 5px;
   border: none;
+  background-color: rgba(0, 0, 0, 0.308);
 }
 
+::placeholder {
+  color: white;
+  font-size: 20px;
+  font-weight: 400;
+  font-family: "Montserrat", sans-serif;
+}
 .regSignup {
-  padding: 15px 20px;
+  padding: 20px 40px;
   border: none;
   border-radius: 10px;
-  margin-right: 20px;
+  margin-right: 50px;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  color: rgb(12, 168, 142);
+}
+
+.regLogin {
+  text-transform: uppercase;
+  color: black;
+  font-weight: bold;
 }
 
 .alreadyAccountlogin {
@@ -44,4 +68,6 @@
   border: none;
   border-radius: 10px;
   margin-right: 20px;
+  color: white;
+  font-size: 20px;
 }

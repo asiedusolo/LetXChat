@@ -93,8 +93,11 @@ const Register = () => {
   // };
   return (
     <div className="registerContainer">
+      <h1 className="registerLogo">
+        Let<span className="landingDescPart">X</span>Chat
+      </h1>
       <div className="registerMessage">
-        <h3>Enter your details to sign up on LetXChat</h3>
+        <h3>Enter your details to sign up</h3>
       </div>
       {/* <div className="registerModal">
         {showModal && <Modal isValidUser={isValidUser} hideModal={hideModal} />}
@@ -143,7 +146,7 @@ const Register = () => {
               name="staffEmail"
               maxLength="50"
               ref={staffEmailRef}
-              placeholder="staffEmail"
+              placeholder="Email"
               className="registerEmailField"
               required
             />
@@ -176,11 +179,12 @@ const Register = () => {
             <button type="submit" className="regSignup regLink">
               Sign up
             </button>
-            <button className="alreadyAccountlogin">
+            <p className="alreadyAccountlogin">
+              Already have an account?
               <Link to="/login" className="regLogin">
-                Log into Account
+                Log In
               </Link>
-            </button>
+            </p>
           </div>
         </form>
       </div>

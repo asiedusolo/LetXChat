@@ -29,8 +29,11 @@ const Login = () => {
   // };
   return (
     <div className="loginContainer">
+      <h1 className="loginLogo">
+        Let<span className="landingDescPart">X</span>Chat
+      </h1>
       <div className="loginMessage">
-        <h1>Enter your details to login</h1>
+        <h3>Enter your details to login</h3>
       </div>
       {/* <div>{showModal && <Modal hideModal={hideModal} />}</div> */}
       <div className="loginFormContainer">
@@ -62,9 +65,13 @@ const Login = () => {
             {isFetchingUser ? "Logging in..." : "Login"}
           </button>
           {error && (
-            <button className="loginSignup">
-              <Link to="/register">Dont have an account? Sign up</Link>
-            </button>
+            <p className="alreadyAccountlogin">
+              Dont have an account?
+              <Link to="/register" className="regLogin">
+                {" "}
+                Sign up
+              </Link>
+            </p>
           )}
         </form>
       </div>
