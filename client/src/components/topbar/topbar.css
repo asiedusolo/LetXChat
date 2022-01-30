@@ -6,6 +6,7 @@
 }
 
 .profileSection {
+  padding: 0px 20px;
   width: 100%;
   position: absolute;
   margin-top: 10px;
@@ -15,14 +16,20 @@
 }
 
 .chatLogo {
-  width: 10%;
+  width: 40%;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+
+.chatLogo h4 {
+  width: 150px;
+  text-align: center;
 }
 .userContainer {
-  width: 10%;
+  width: 40%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .userContainer {
