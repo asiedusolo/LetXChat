@@ -29,11 +29,21 @@ const storage = multer.diskStorage({
     cb(null, "public/images");
   },
   filename: (req, file, cb) => {
-    cb(null, /* Date.now() + "--" +  */ file.originalname);
+    cb(null, Date.now() + "--" + file.originalname);
   }
 });
 
-const upload = multer({ storage: storage });
+const acceptedMimetypes = ["image", "audio", "video"];
+
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    if (!acceptedMimetypes.includes(file.mimetype.substring(0, 5))) {
+      return cb(new Error("file is not allowed"));
+    }
+    cb(null, true);
+  }
+});
 app.post("/api/upload", upload.single("file"), (req, res) => {
   try {
     console.log(req.file);

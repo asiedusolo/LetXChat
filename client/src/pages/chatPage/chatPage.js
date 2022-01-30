@@ -19,6 +19,7 @@ const ChatPage = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const socket = useRef();
   const scrollRef = useRef(null);
+  const [fileData, setFileData] = useState();
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -126,6 +127,44 @@ const ChatPage = () => {
       }
     }
   };
+
+  const fileChangeHandler = (e) => {
+    setFileData(e.target.files[0]);
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+    const data = new FormData();
+    data.append("file", fileData);
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/upload",
+        data
+      );
+      console.log("Filename", response.data.filename);
+      const messageBody = {
+        chatRoomId: currentChatRoom._id,
+        senderId: user._id,
+        senderUsername: user.username,
+        text: response.data.filename
+      };
+      try {
+        const messageResponse = await axios.put(
+          `http://localhost:5000/api/messages`,
+          messageBody
+        );
+        console.log("message response", messageResponse);
+        setCurrentChatRoomMessages([
+          ...currentChatRoomMessages,
+          messageResponse.data
+        ]);
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div>
       <Topbar />
@@ -168,7 +207,16 @@ const ChatPage = () => {
               )}
             </div>
             <div className="chatBoxBottom">
-              <button className="chatAttatchment">Attachment</button>
+              <form onSubmit={onSubmitHandler}>
+                <input
+                  type="file"
+                  name="mediaFile"
+                  onChange={fileChangeHandler}
+                />
+                <button type="submit" className="chatAttatchment">
+                  Send Media
+                </button>
+              </form>
               <textarea
                 className="chatMessageInput"
                 placeholder="Type your message here"
