@@ -134,35 +134,46 @@ const ChatPage = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("file", fileData);
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/upload",
-        data
-      );
-      console.log("Filename", response.data.filename);
-      const messageBody = {
-        chatRoomId: currentChatRoom._id,
-        senderId: user._id,
-        senderUsername: user.username,
-        text: response.data.filename
-      };
+    if (fileData) {
+      const data = new FormData();
+      data.append("file", fileData);
       try {
-        const messageResponse = await axios.put(
-          `http://localhost:5000/api/messages`,
-          messageBody
+        const response = await axios.post(
+          "http://localhost:5000/api/upload",
+          data
         );
-        console.log("message response", messageResponse);
-        setCurrentChatRoomMessages([
-          ...currentChatRoomMessages,
-          messageResponse.data
-        ]);
+        console.log("Filename", response.data.filename);
+        const messageBody = {
+          chatRoomId: currentChatRoom._id,
+          senderId: user._id,
+          senderUsername: user.username,
+          text: response.data.filename
+        };
+        const socketNewMessage = {
+          chatRoomId: currentChatRoom._id,
+          chatRoomName: currentChatRoom.chatRoomName,
+          senderId: user._id,
+          senderUsername: user.username,
+          text: response.data.filename
+        };
+        socket.current.emit("sendMessage", socketNewMessage);
+        try {
+          const messageResponse = await axios.post(
+            "http://localhost:5000/api/messages",
+            messageBody
+          );
+          console.log("message response", messageResponse);
+          setCurrentChatRoomMessages([
+            ...currentChatRoomMessages,
+            messageResponse.data
+          ]);
+        } catch (error) {
+          console.log(error);
+          alert("File type not supported or file too big");
+        }
       } catch (error) {
         console.log(error);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
   return (
