@@ -2,7 +2,6 @@ import "./message.css";
 import TimeAgo from "react-timeago";
 
 const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
-  console.log(text);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const mediaTypes = ["image", "audio", "video"];
 

@@ -133,7 +133,7 @@ const ChatPage = () => {
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    if (fileData) {
+    if (fileData && currentChatRoom) {
       const data = new FormData();
       data.append("file", fileData);
       try {
@@ -141,7 +141,6 @@ const ChatPage = () => {
           "http://localhost:5000/api/upload",
           data
         );
-        console.log("Filename", response.data.filename);
         const messageBody = {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,
@@ -161,7 +160,6 @@ const ChatPage = () => {
             "http://localhost:5000/api/messages",
             messageBody
           );
-          console.log("message response", messageResponse);
           setCurrentChatRoomMessages([
             ...currentChatRoomMessages,
             messageResponse.data
@@ -217,11 +215,12 @@ const ChatPage = () => {
               )}
             </div>
             <div className="chatBoxBottom">
-              <form onSubmit={onSubmitHandler}>
+              <form onSubmit={onSubmitHandler} className="sendMediaForm">
                 <input
                   type="file"
                   name="mediaFile"
                   onChange={fileChangeHandler}
+                  className="chatAttatchment"
                 />
                 <button type="submit" className="chatAttatchment">
                   Send Media
