@@ -51,6 +51,22 @@
   border-radius: 2px;
 }
 
+.messageImage {
+  width: 300px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.messgeAudio {
+  width: 300px;
+  height: 50px;
+}
+
+.messageVideo {
+  width: 300px;
+  height: 150px;
+}
+
 .messageBottom {
   font-size: 12px;
 }

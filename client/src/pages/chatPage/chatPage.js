@@ -23,7 +23,6 @@ const ChatPage = () => {
 
   useEffect(() => {
     window.onpopstate = () => {
-      alert("leaving");
       socket.current.emit(
         "leave-room",
         chatRooms.map((chatRoom) => chatRoom.chatRoomName)
