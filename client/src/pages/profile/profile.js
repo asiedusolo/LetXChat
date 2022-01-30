@@ -103,15 +103,20 @@ const Profile = () => {
             }
             className="userImage"
           />
-          <h3>{newUsername ? newUsername : user.username}</h3>
-          <h3>{user.staff_email}</h3>
+          <h3 className="userUsername">
+            {newUsername ? newUsername : user.username}
+          </h3>
+          <h3 className="userEmail">{user.staff_email}</h3>
           <form onSubmit={onSubmitHandler}>
             <input
               type="file"
               name="picturePicture"
               onChange={fileChangeHandler}
+              className="userInputFile"
             />
-            <button type="submit">Change profile</button>
+            <button className="changeProfile" type="submit">
+              Change profile
+            </button>
           </form>
         </div>
       </div>
