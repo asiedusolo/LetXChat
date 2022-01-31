@@ -15,7 +15,7 @@ const Topbar = () => {
           Let<span className="landingDescPart">X</span>Chat
         </div>
         <div className="userContainer">
-          <p class="userName">{user.name}</p>
+          <p className="userName">{user.name}</p>
           <Link to={`/profile/${user.username}`}>
             <img
               alt="userPicture"

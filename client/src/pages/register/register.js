@@ -30,7 +30,6 @@ const Register = () => {
     };
     fetchChatRooms();
   }, []);
-  console.log(chatRoomIds);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -77,7 +76,6 @@ const Register = () => {
             )
           )
           .then((response) => console.log("Joined chat rooms select"));
-        console.log(response.data._id);
 
         history.push("/login");
       } catch (error) {

@@ -24,7 +24,6 @@ const Profile = () => {
     };
     fetchUser();
   }, [username]);
-  console.log(userPicture);
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     const data = new FormData();
@@ -34,7 +33,6 @@ const Profile = () => {
         "http://localhost:5000/api/upload",
         data
       );
-      console.log("Filename", response.data.filename);
       const updates = {
         picture_avatar: response.data.filename
       };
@@ -43,7 +41,6 @@ const Profile = () => {
           `http://localhost:5000/api/user/${user._id}`,
           updates
         );
-        console.log("user response", userResponse.data.picture_avatar);
         setUserPicture(userResponse.data.picture_avatar);
       } catch (error) {
         console.log(error);

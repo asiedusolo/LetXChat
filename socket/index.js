@@ -37,7 +37,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("sendCurrentUser", (userId) => {
-    console.log(userId);
     //join user with current socketId to his or chatRooms
     let userConnectedChatRoom = allConnectedChatRooms.filter(
       (userChatRoom) => userChatRoom.userId === userId
