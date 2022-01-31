@@ -13,7 +13,6 @@
 
 .userProfileData {
   width: 40%;
-  /* border: 1px solid black; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,7 +25,6 @@
 }
 
 .userProfileWrapper {
-  /* border: 1px solid green; */
   text-align: center;
 }
 
@@ -39,7 +37,6 @@
 
 .userProfileEdit {
   width: 40%;
-  /* border: 1px solid red; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -86,4 +83,20 @@
   padding: 5px 10px;
   border-radius: 5px;
   color: rgb(12, 168, 142);
+}
+
+@media screen and (max-width: 819px) {
+  .profilePage {
+    flex-direction: column;
+  }
+
+  .userProfileData {
+    width: 80%;
+    margin: 50px auto;
+  }
+
+  .userProfileEdit {
+    width: 80%;
+    margin: 0px auto;
+  }
 }
