@@ -112,3 +112,21 @@
   color: grey;
   padding: 20px;
 }
+
+@media screen and (max-width: 907px) {
+  .noMessages {
+    font-size: 65px;
+  }
+}
+
+@media screen and (max-width: 612px) {
+  .noMessages {
+    font-size: 55px;
+  }
+}
+
+@media screen and (max-width: 780px) {
+  .chatDetails {
+    display: none;
+  }
+}

@@ -71,3 +71,9 @@
   color: white;
   font-size: 20px;
 }
+
+@media screen and (max-width: 650px) {
+  .registerMessage {
+    text-align: center;
+  }
+}
