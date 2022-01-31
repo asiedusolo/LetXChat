@@ -12,7 +12,7 @@ const Topbar = () => {
     <div className="topbar">
       <div className="profileSection">
         <div className="chatLogo">
-          <h4>LetXChat</h4>
+          Let<span className="landingDescPart">X</span>Chat
         </div>
         <div className="userContainer">
           <p class="userName">{user.name}</p>

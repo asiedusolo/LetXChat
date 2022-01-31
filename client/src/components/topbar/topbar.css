@@ -1,7 +1,7 @@
 .topbar {
   height: 70px;
   width: 100%;
-  background-color: #00bfb2;
+  background-color: #0ece81;
   position: relative;
 }
 
@@ -20,6 +20,11 @@
   display: flex;
   justify-content: flex-start;
   padding-left: 20px;
+  align-self: center;
+  margin-left: 50px;
+  margin-top: 0px;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .chatLogo h4 {

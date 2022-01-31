@@ -49,7 +49,7 @@ body {
 }
 
 .landingConnect {
-  font-size: 120px;
+  font-size: 6em;
   text-transform: uppercase;
   margin-bottom: 0px;
   font-weight: bold;
@@ -100,6 +100,42 @@ body {
   font-weight: bold;
 }
 
-/* .regLink:hover,
-.landingRegLink:hover {
-} */
+@media screen and (max-width: 1094px) {
+  .landingPage {
+    flex-direction: column;
+  }
+
+  .landingImageLogoSection {
+    width: 80%;
+    margin: 0 auto;
+  }
+
+  .landingPageImageWrapper {
+    width: 100%;
+  }
+  .landingPageImage {
+    width: 100%;
+    height: auto;
+  }
+
+  .landingConnectSection {
+    width: 80%;
+    margin: 0 auto;
+  }
+  .landingConnect {
+    font-size: 4em;
+  }
+  .landingBriefInfo {
+    text-align: center;
+  }
+
+  .landing-btns-container {
+    margin-top: 20px;
+  }
+
+  .landingSignup,
+  .landingLogin {
+    padding: 10px 20px;
+    margin-bottom: 10px;
+  }
+}
