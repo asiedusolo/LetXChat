@@ -102,4 +102,8 @@
   .profileEditButton {
     padding: 10px 15px;
   }
+
+  .userInputFile {
+    margin-left: 40px;
+  }
 }
