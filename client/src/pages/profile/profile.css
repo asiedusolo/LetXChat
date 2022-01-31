@@ -99,4 +99,7 @@
     width: 80%;
     margin: 0px auto;
   }
+  .profileEditButton {
+    padding: 10px 15px;
+  }
 }
