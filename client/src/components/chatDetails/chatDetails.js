@@ -37,23 +37,25 @@ const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
         </div>
       </div>
       <div className="memberList">
-        <h2>Chat Members</h2>
-        {usersInfo.map((member, index) => {
-          return (
-            <div key={index} className="member">
-              <img
-                className="memberImg"
-                src={
-                  member.picture_avatar
-                    ? PF + member.picture_avatar
-                    : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-                }
-                alt=""
-              />
-              <p className="memberName">{member.name}</p>
-            </div>
-          );
-        })}
+        <div className="memberWrapper">
+          <h2>Chat Members</h2>
+          {usersInfo.map((member, index) => {
+            return (
+              <div key={index} className="member">
+                <img
+                  className="memberImg"
+                  src={
+                    member.picture_avatar
+                      ? PF + member.picture_avatar
+                      : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                  }
+                  alt=""
+                />
+                <p className="memberName">{member.name}</p>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

@@ -8,6 +8,13 @@
   padding: 20px;
 }
 
+.chatRoomMeta {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .memberList {
   margin-top: 50px;
   height: 70%;
