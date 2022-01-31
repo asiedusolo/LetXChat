@@ -130,3 +130,25 @@
     display: none;
   }
 }
+
+@media screen and (max-width: 480px) {
+  .chatPage {
+    flex-direction: column;
+  }
+
+  .chatRooms {
+    width: 100%;
+    margin: 0px auto;
+  }
+
+  .chatRoomsWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .chatBoxWrapper {
+    padding: 20px;
+  }
+}
