@@ -12,7 +12,8 @@ When users navigate to the website, they are welcomed with a nice landing page w
 
 1. Change directory in server folder( cd server)
 2. Install npm packages by running npm install
-3. Run `npm start`
+3. Create a .env file and put your database url in it.
+4. Run `npm start`
 
 ### How to start the socket.IO Server
 
