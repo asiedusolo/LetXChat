@@ -13,7 +13,7 @@ const LandingPage = () => {
             Let<span className="landingDescPart">X</span>Chat
           </h1>
           <img
-            src={PF + "Online world-cuate.png"}
+            src="https://media.istockphoto.com/id/1142207515/photo/smiling-african-american-woman-chatting-on-smartphone-modern-technology-app.webp?b=1&s=170667a&w=0&k=20&c=HV2kHRP5nv3KXd-AlbCFLe8FOLGYpNDJareJ0OrvcNA="
             alt="landingPicture"
             className="landingPageImage"
           />

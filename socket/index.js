@@ -2,13 +2,13 @@ const { instrument } = require("@socket.io/admin-ui");
 
 const io = require("socket.io")(8900, {
   cors: {
-    orgin: ["http://localhost:3000", "https://admin.socket.io/#/"]
+    origin: ["http://localhost:3000", "https://admin.socket.io/#/"]
   }
 });
 
 require("dotenv").config();
-const bcrypt = require("bcrypt");
-const saltRounds = 10;
+// const bcrypt = require("bcrypt");
+// const saltRounds = 10;
 
 let allConnectedChatRooms = [];
 
@@ -70,18 +70,19 @@ io.on("connection", (socket) => {
   );
 
   socket.on("disconnect", () => {
+    removeUser(socket.id)
     console.log("user disconnected");
   });
 });
 
-bcrypt.genSalt(saltRounds, (err, salt) => {
-  bcrypt.hash(process.env.PASSWORD, salt, (err, hash) => {
-    instrument(io, {
-      auth: {
-        type: "basic",
-        username: "admin",
-        password: hash
-      }
-    });
-  });
-});
+// bcrypt.genSalt(saltRounds, (err, salt) => {
+//   bcrypt.hash(process.env.PASSWORD, salt, (err, hash) => {
+//     instrument(io, {
+//       auth: {
+//         type: "basic",
+//         username: "admin",
+//         password: hash
+//       }
+//     });
+//   });
+// });
