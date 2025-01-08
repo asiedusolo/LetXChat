@@ -248,7 +248,7 @@ const ChatPage = () => {
               />
             ) : (
               <div className="noCurrentChat">
-                Click on a chat room to display chat details
+                Click on a chat room to display chat messages
               </div>
             )}
           </div>
