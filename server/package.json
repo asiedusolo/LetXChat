@@ -5,12 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "",
-    "start": "nodemon index.js"
+    "start": "node index.js",
+    "start:dev": "nodemon index.js"
   },
   "author": "Solomon Asiedu",
   "license": "ISC",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcryptjs": "^3.0.2",
     "body-parser": "^1.19.1",
     "cors": "^2.8.5",
     "dotenv": "^14.2.0",

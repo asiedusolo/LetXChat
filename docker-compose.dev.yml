@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  client:
+    build: ./client
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    command: npm start
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+    depends_on:
+      - server
+      - socket
+
+  server:
+    build: ./server
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - PORT=5000
+      - NODE_ENV=development
+    command: npm start:dev
+
+  socket:
+    build: ./socket
+    ports:
+      - "8900:8900"
+    volumes:
+      - ./socket:/app
+      - /app/node_modules
+    environment:
+      - PORT=8900
+      - NODE_ENV=development
+    command: npm start:dev

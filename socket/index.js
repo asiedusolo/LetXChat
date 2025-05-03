@@ -7,8 +7,7 @@ const io = require("socket.io")(8900, {
 });
 
 require("dotenv").config();
-// const bcrypt = require("bcrypt");
-// const saltRounds = 10;
+
 
 let allConnectedChatRooms = [];
 
@@ -74,15 +73,3 @@ io.on("connection", (socket) => {
     console.log("user disconnected");
   });
 });
-
-// bcrypt.genSalt(saltRounds, (err, salt) => {
-//   bcrypt.hash(process.env.PASSWORD, salt, (err, hash) => {
-//     instrument(io, {
-//       auth: {
-//         type: "basic",
-//         username: "admin",
-//         password: hash
-//       }
-//     });
-//   });
-// });
