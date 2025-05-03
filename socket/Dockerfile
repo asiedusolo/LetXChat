@@ -9,4 +9,4 @@ ENV NODE_ENV=production
 ENV PORT 8900
 
 EXPOSE 8900
-CMD ["npm", "start"]
+CMD ["node", "index.js"]

@@ -29,7 +29,10 @@ const ChatPage = () => {
     };
   });
   useEffect(() => {
-    socket.current = io("http://localhost:8900");
+    socket.current = io("http://localhost:8900", {
+      path: '/socket.io',
+      transports: ['websocket']
+    });
     socket.current.on("receiveMessage", (arrivingMessage) => {
       setArrivalMessage({
         chatRoomId: arrivingMessage.chatRoomId,

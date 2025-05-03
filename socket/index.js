@@ -1,6 +1,8 @@
 const { instrument } = require("@socket.io/admin-ui");
 
 const io = require("socket.io")(8900, {
+  // alternate between http://localhost:3000 and http://localhost for local
+  // docker
   cors: {
     origin: ["http://localhost:3000", "https://admin.socket.io/#/"]
   }
