@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   client:
-    container_name: letxchat-dev-client
     build:
       context: ./client
       dockerfile: Dockerfile.dev
@@ -19,12 +18,11 @@ services:
     command: npm run start
 
   server:
-    container_name: letxchat-dev-server
     build:
       context: ./server
       dockerfile: Dockerfile.dev
     ports:
-      - "5000:5000"
+      - "5001:5001"
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -36,17 +34,16 @@ services:
     command: npm run start:dev
 
   socket:
-    container_name: letxchat-dev-socket
     build:
       context: ./socket
       dockerfile: Dockerfile.dev
     ports:
-      - "8900:8900"
+      - "8901:8901"
     volumes:
       - ./socket:/app
       - /app/node_modules
     environment:
-      - PORT=8900
+      - PORT=8901
       - NODE_ENV=development
     restart: unless-stopped
     command: npm run start:dev

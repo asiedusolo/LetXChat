@@ -3,7 +3,6 @@ version: '3.8'
 
 services:
   client:
-    container_name: letxchat-prod-client
     build: ./client
     ports:
       - "80:80"
@@ -15,7 +14,6 @@ services:
 
 
   server:
-    container_name: letxchat-prod-server
     build: ./server
     ports:
       - "5000:5000"
@@ -26,7 +24,6 @@ services:
 
 
   socket:
-    container_name: letxchat-prod-socket
     build: ./socket
     ports:
       - "8900:8900"
