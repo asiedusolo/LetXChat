@@ -2,21 +2,27 @@ version: '3.8'
 
 services:
   client:
-    build: ./client
+    container_name: letxchat-dev-client
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
     ports:
       - "3000:3000"
     volumes:
       - ./client:/app
       - /app/node_modules
-    command: npm start
     environment:
       - CHOKIDAR_USEPOLLING=true
     depends_on:
       - server
       - socket
+    command: npm run start
 
   server:
-    build: ./server
+    container_name: letxchat-dev-server
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
     ports:
       - "5000:5000"
     volumes:
@@ -26,10 +32,14 @@ services:
       - MONGO_URI=${MONGO_URI}
       - PORT=5000
       - NODE_ENV=development
-    command: npm start:dev
+    restart: unless-stopped
+    command: npm run start:dev
 
   socket:
-    build: ./socket
+    container_name: letxchat-dev-socket
+    build:
+      context: ./socket
+      dockerfile: Dockerfile.dev
     ports:
       - "8900:8900"
     volumes:
@@ -38,4 +48,5 @@ services:
     environment:
       - PORT=8900
       - NODE_ENV=development
-    command: npm start:dev
+    restart: unless-stopped
+    command: npm run start:dev
