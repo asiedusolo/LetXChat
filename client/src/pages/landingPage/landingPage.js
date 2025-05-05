@@ -53,7 +53,7 @@ import { FiArrowRight } from "react-icons/fi";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-500 to-emerald-600 font-sans">
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-teal-400 font-sans">
       {/* Main Content */}
       <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between min-h-[90vh]">
         {/* Left Column - Image */}
@@ -71,13 +71,13 @@ const LandingPage = () => {
         {/* Right Column - Text Content */}
         <div className="w-full lg:w-1/2 lg:pl-8 text-white">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Let<span className="text-emerald-100">X</span>Chat
+            Let<span className="text-yellow-300">X</span>Chat
           </h1>
 
           <div className="mb-8">
             <p className="text-4xl md:text-5xl font-bold mb-2">Connect</p>
             <p className="text-2xl md:text-3xl mb-2">
-              and <span className="font-semibold text-emerald-100">share</span> with
+              and <span className="font-semibold text-yellow-300">share</span> with
             </p>
             <p className="text-3xl md:text-4xl font-bold">colleagues</p>
           </div>
@@ -91,13 +91,13 @@ const LandingPage = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <Link
               to="/register"
-              className="bg-white text-emerald-600 hover:bg-emerald-50 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+              className="bg-white text-teal-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.02]"
             >
               Get Started <FiArrowRight className="inline" />
             </Link>
             <Link
               to="/login"
-              className="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center shadow-lg hover:shadow-xl"
+              className="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-[1.02]"
             >
               Login
             </Link>
