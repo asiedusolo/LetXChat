@@ -6,4 +6,8 @@ RUN npm install -g npm@8.19.4
 RUN npm install --legacy-peer-deps
 COPY . .
 
+# Add this right after COPY . . or before CMD
+RUN mkdir -p node_modules/.cache && chown -R node:node node_modules/.cache
+USER node  # Switch to non-root user
+
 CMD ["npm", "start"]
