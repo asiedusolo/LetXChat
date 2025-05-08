@@ -8,6 +8,6 @@ COPY . .
 
 # Add this right after COPY . . or before CMD
 RUN mkdir -p node_modules/.cache && chown -R node:node node_modules/.cache
-USER node  # Switch to non-root user
+USER ubuntu  # Switch to non-root user
 
 CMD ["npm", "start"]
