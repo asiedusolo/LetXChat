@@ -22,8 +22,22 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
+const allowedOrigins = [
+  'http://ec2-13-53-207-22.eu-north-1.compute.amazonaws.com',
+  'http://localhost',
+  'http://localhost:3000'
+];
+
 app.use(cors({
-  origin: 'http://ec2-13-53-207-22.eu-north-1.compute.amazonaws.com',
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
