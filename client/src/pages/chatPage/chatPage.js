@@ -433,7 +433,7 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-blue-500 to-teal-400">
+    <div className="flex flex-col h-screen">
       <Topbar />
 
       <div className="flex flex-1 overflow-hidden">

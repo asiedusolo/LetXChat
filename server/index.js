@@ -22,7 +22,13 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://ec2-13-53-207-22.eu-north-1.compute.amazonaws.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('*', cors()); 
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
