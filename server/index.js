@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 const allowedOrigins = [
-  'http://ec2-13-53-207-22.eu-north-1.compute.amazonaws.com',
   'http://localhost',
   'http://localhost:3000'
 ];
