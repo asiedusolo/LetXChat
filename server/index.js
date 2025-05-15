@@ -22,7 +22,11 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-app.use(cors());
+const corsOptions = {
+  origin: ["http://localhost:3000"]
+}
+app.use(cors(corsOptions))
+// app.use(cors());
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
