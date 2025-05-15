@@ -23,7 +23,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 const allowedOrigins = [
-  'http://localhost',
   'http://localhost:3000'
 ];
 
@@ -37,7 +36,7 @@ app.use(cors({
       return callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
