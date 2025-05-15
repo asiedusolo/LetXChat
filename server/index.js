@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 const corsOptions = {
-  origin: ["http://localhost:3000"]
+  origin: "http://localhost:3000", // adjust to your frontend origin
 }
 app.use(cors(corsOptions))
 // app.use(cors());
