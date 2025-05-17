@@ -3,7 +3,9 @@ version: '3.8'
 
 services:
   client:
-    build: ./client
+    build:
+      context: ./client
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     depends_on:
@@ -14,7 +16,9 @@ services:
 
 
   server:
-    build: ./server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     environment:
@@ -24,7 +28,9 @@ services:
 
 
   socket:
-    build: ./socket
+    build:
+      context: ./socket
+      dockerfile: Dockerfile
     ports:
       - "8900:8900"
     environment:
