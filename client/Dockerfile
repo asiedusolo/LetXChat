@@ -7,8 +7,13 @@ COPY .env.production .
 # RUN npm install ajv@6.12.6 ajv-keywords@3.5.2 --save
 # RUN npm install --legacy-peer-deps
 RUN npm install
+
 COPY . .
-ENV API_BASE_URL=http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com/api
+
+ARG API_BASE_URL
+ENV API_BASE_URL=$API_BASE_URL
+
+
 RUN npm run build
 
 
