@@ -17,7 +17,7 @@ import "./profile.css";
 //   useEffect(() => {
 //     const fetchUser = async () => {
 //       const response = await axios.get(
-//         `${API_BASE_URL}/user?username=${username}`
+//         `${REACT_APP_API_BASE_URL}/user?username=${username}`
 //       );
 //       setUser(response.data);
 //       setUserPicture(response.data.picture_avatar);
@@ -30,7 +30,7 @@ import "./profile.css";
 //     data.append("file", fileData);
 //     try {
 //       const response = await axios.post(
-//         "${API_BASE_URL}/upload",
+//         "${REACT_APP_API_BASE_URL}/upload",
 //         data
 //       );
 //       const updates = {
@@ -38,7 +38,7 @@ import "./profile.css";
 //       };
 //       try {
 //         const userResponse = await axios.put(
-//           `${API_BASE_URL}/user/${user._id}`,
+//           `${REACT_APP_API_BASE_URL}/user/${user._id}`,
 //           updates
 //         );
 //         setUserPicture(userResponse.data.picture_avatar);
@@ -74,7 +74,7 @@ import "./profile.css";
 
 //     try {
 //       const response = await axios.put(
-//         `${API_BASE_URL}/user/${user._id}`,
+//         `${REACT_APP_API_BASE_URL}/user/${user._id}`,
 //         updates
 //       );
 //       setNewUsername(response.data.username);
@@ -165,12 +165,12 @@ const Profile = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const API_BASE_URL = process.env.API_BASE_URL
+  const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
 
   useEffect(() => {
     const fetchUser = async () => {
       const response = await axios.get(
-        `${API_BASE_URL}/user?username=${username}`
+        `${REACT_APP_API_BASE_URL}/user?username=${username}`
       );
       setUser(response.data);
       setUserPicture(response.data.picture_avatar);
@@ -184,7 +184,7 @@ const Profile = () => {
     data.append("file", fileData);
     try {
       const response = await axios.post(
-        "${API_BASE_URL}/upload",
+        "${REACT_APP_API_BASE_URL}/upload",
         data
       );
       const updates = {
@@ -192,7 +192,7 @@ const Profile = () => {
       };
       try {
         const userResponse = await axios.put(
-          `${API_BASE_URL}/user/${user._id}`,
+          `${REACT_APP_API_BASE_URL}/user/${user._id}`,
           updates
         );
         setUserPicture(userResponse.data.picture_avatar);
@@ -228,7 +228,7 @@ const Profile = () => {
 
     try {
       const response = await axios.put(
-        `${API_BASE_URL}/user/${user._id}`,
+        `${REACT_APP_API_BASE_URL}/user/${user._id}`,
         updates
       );
       setNewUsername(response.data.username);
