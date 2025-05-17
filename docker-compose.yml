@@ -6,6 +6,8 @@ services:
     build: ./client
     ports:
       - "80:80"
+    environment:
+      - API_BASE_URL=${API_BASE_URL}
     depends_on:
       - server
       - socket
