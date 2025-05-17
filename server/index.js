@@ -24,8 +24,11 @@ app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 const corsOptions = {
   origin: ["http://localhost:3000", "http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com"], // adjust to your frontend origin
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }
 app.use(cors(corsOptions))
+app.options("*", cors(corsOptions)); 
 // app.use(cors());
 
 const storage = multer.diskStorage({
