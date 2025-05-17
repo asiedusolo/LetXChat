@@ -272,6 +272,7 @@ const ChatPage = () => {
   const scrollRef = useRef(null);
   const [fileData, setFileData] = useState();
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+  const REACT_APP_SOCKET_BASE_URL = process.env.REACT_APP_SOCKET_BASE_URL
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -283,7 +284,7 @@ const ChatPage = () => {
   });
   
   useEffect(() => {
-    socket.current = io("http://localhost:8900", {
+    socket.current = io(`${REACT_APP_SOCKET_BASE_URL}`, {
       path: '/socket.io',
       transports: ['websocket']
     });
