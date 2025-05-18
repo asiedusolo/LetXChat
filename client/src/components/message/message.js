@@ -88,7 +88,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   const renderMediaMessage = (type) => {
     const mediaClasses = {
       image: "w-full max-w-xs h-40 object-cover rounded-lg",
-      audio: "w-full max-w-xs h-12",
+      audio: "w-full max-w-3xl h-12",
       video: "w-full max-w-xs h-40 object-cover rounded-lg"
     };
 
