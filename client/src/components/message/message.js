@@ -104,20 +104,31 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
           />
         </div>
         <div className={messageContentClasses}>
-          {type === "image" ? (
+          {type === "image" && (
             <img 
               alt="imageMessage" 
               src={PF + text} 
               className={mediaClasses.image} 
             />
-          ) : (
+            
+          )}
+          {type === "video" && (
             <video 
               controls 
               name="media" 
-              className={mediaClasses[type]}
+              className={mediaClasses.video}
             >
               <source src={PF + text} />
             </video>
+          )}
+          {type === "audio" && (
+            <video 
+            controls 
+            name="media" 
+            className={mediaClasses.audio}
+          >
+            <source src={PF + text} />
+          </video>
           )}
         </div>
       </div>
