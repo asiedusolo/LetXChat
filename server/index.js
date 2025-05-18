@@ -13,7 +13,6 @@ const bodyParser = require("body-parser");
 
 const multer = require("multer");
 
-app.use(express.json());
 app.use(
   express.urlencoded({
     extended: false
@@ -22,7 +21,15 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+}));
+
+app.options("*", cors())
+
+app.use(express.json());
+
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
