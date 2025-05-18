@@ -22,7 +22,7 @@ services:
       context: ./server
       dockerfile: Dockerfile.dev
     ports:
-      - "5001:5001"
+      - "5000:5000"
     volumes:
       - ./server:/app
       - /app/node_modules
@@ -38,12 +38,12 @@ services:
       context: ./socket
       dockerfile: Dockerfile.dev
     ports:
-      - "8901:8901"
+      - "8900:8900"
     volumes:
       - ./socket:/app
       - /app/node_modules
     environment:
-      - PORT=8901
+      - PORT=8900
       - NODE_ENV=development
     restart: unless-stopped
     command: npm run start:dev
