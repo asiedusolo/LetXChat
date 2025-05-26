@@ -1,10 +1,12 @@
 const { instrument } = require("@socket.io/admin-ui");
+require("dotenv").config();
+
 
 const io = require("socket.io")(8900, {
   // alternate between http://localhost:3000 and http://localhost for local
   // docker
   cors: {
-    origin: ["http://localhost:3000", "https://admin.socket.io/#/"]
+    origin: [`${process.env.CORS_ORIGIN || 'http://localhost:3000'}`]
   }
 });
 

@@ -18,7 +18,7 @@ import "./register.css";
 //   useEffect(() => {
 //     const fetchChatRooms = async () => {
 //       try {
-//         const response = await axios.get("http://localhost:5000/api/chatRooms");
+//         const response = await axios.get("${REACT_APP_API_BASE_URL}/chatRooms");
 //         setChatRoomIds(response.data.map((chatroom) => chatroom._id));
 //       } catch (error) {
 //         console.log(error);
@@ -41,7 +41,7 @@ import "./register.css";
 //       };
 //       try {
 //         const response = await axios.post(
-//           "http://localhost:5000/api/auth/register",
+//           "${REACT_APP_API_BASE_URL}/auth/register",
 //           newUser
 //         );
 
@@ -66,7 +66,7 @@ import "./register.css";
 //           .all(
 //             subArray.map((member) =>
 //               axios.put(
-//                 `http://localhost:5000/api/chatRooms/${member}/${response.data._id}`
+//                 `${REACT_APP_API_BASE_URL}/chatRooms/${member}/${response.data._id}`
 //               )
 //             )
 //           )
@@ -186,13 +186,15 @@ const Register = () => {
   const passwordRef = useRef(null);
   const passwordConfirmRef = useRef(null);
   const history = useHistory();
+const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+
 
   const [chatRoomIds, setChatRoomIds] = useState([]);
 
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/chatRooms");
+        const response = await axios.get(`${REACT_APP_API_BASE_URL}/chatRooms`);
         setChatRoomIds(response.data.map((chatroom) => chatroom._id));
       } catch (error) {
         console.log(error);
@@ -215,7 +217,7 @@ const Register = () => {
       };
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/register",
+          `${REACT_APP_API_BASE_URL}/auth/register`,
           newUser
         );
         const allChatRoomIds = chatRoomIds;
@@ -239,7 +241,7 @@ const Register = () => {
           .all(
             subArray.map((member) =>
               axios.put(
-                `http://localhost:5000/api/chatRooms/${member}/${response.data._id}`
+                `${REACT_APP_API_BASE_URL}/chatRooms/${member}/${response.data._id}`
               )
             )
           )
