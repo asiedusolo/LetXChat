@@ -6,6 +6,11 @@ COPY package.json .
 # RUN npm install ajv@6.12.6 ajv-keywords@3.5.2 --save
 RUN npm install --legacy-peer-deps
 COPY . .
+
+ARG REACT_APP_API_BASE_URL
+ENV REACT_APP_API_BASE_URL=$REACT_APP_API_BASE_URL
+
+
 RUN npm run build
 
 
