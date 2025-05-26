@@ -23,29 +23,31 @@ app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 console.log({origin: process.env.CORS_ORIGIN})
 
-// Debugging middleware
-app.use((req, res, next) => {
-  console.log('Incoming request:', {
-    method: req.method,
-    path: req.path,
-    origin: req.headers.origin
-  });
-  next();
-});
+// // Debugging middleware
+// app.use((req, res, next) => {
+//   console.log('Incoming request:', {
+//     method: req.method,
+//     path: req.path,
+//     origin: req.headers.origin
+//   });
+//   next();
+// });
 
-// Enhanced CORS configuration
-const corsOptions = {
-  origin: [
-    'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
-    'http://localhost:3000'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-  credentials: true,
-  optionsSuccessStatus: 200
-};
+// // Enhanced CORS configuration
+// const corsOptions = {
+//   origin: [
+//     'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
+//     'http://localhost:3000'
+//   ],
+//   methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
+//   credentials: true,
+//   optionsSuccessStatus: 200
+// };
 
 
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com'
+}))
 
 // Explicit OPTIONS handler
 app.options('*', cors(corsOptions));
