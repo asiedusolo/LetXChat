@@ -21,6 +21,8 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
+console.log({origin: process.env.CORS_ORIGIN})
+
 // Enhanced CORS configuration
 app.use(cors({
   origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
