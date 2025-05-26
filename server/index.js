@@ -35,24 +35,14 @@ app.use((req, res, next) => {
 
 // Enhanced CORS configuration
 const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      process.env.CORS_ORIGIN, 
-      'http://localhost:3000'
-    ];
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      console.log('Allowed origin:', origin);
-      callback(null, true);
-    } else {
-      console.log('Blocked origin:', origin);
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  origin: [
+    'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
+    'http://localhost:3000'
+  ],
   credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
 };
+
 
 app.use(cors(corsOptions));
 
