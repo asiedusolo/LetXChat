@@ -271,8 +271,6 @@ const ChatPage = () => {
   const socket = useRef();
   const scrollRef = useRef(null);
   const [fileData, setFileData] = useState();
-  const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
-  console.log({REACT_APP_API_BASE_URL})
 
   useEffect(() => {
     window.onpopstate = () => {
