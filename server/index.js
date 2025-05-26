@@ -21,10 +21,18 @@ app.use(
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
+// Enhanced CORS configuration
 app.use(cors({
-  origin: [`${process.env.CORS_ORIGIN || 'http://localhost:3000'}`],
+  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 }));
+
+// Handle preflight requests
+app.options('*', cors());
+
 
 app.use(express.json());
 
