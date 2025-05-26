@@ -11,7 +11,7 @@ import "./chatDetails.css";
 //     axios
 //       .all(
 //         currentChatRoomMembers.map((member) =>
-//           axios.get(`${REACT_APP_API_BASE_URL}/user?userId=${member}`)
+//           axios.get(`/api/user?userId=${member}`)
 //         )
 //       )
 //       .then((response) => setUsersInfo(response.map((d) => d.data)));
@@ -19,7 +19,7 @@ import "./chatDetails.css";
 //   useEffect(() => {
 //     const getChatCreator = async () => {
 //       const response = await axios.get(
-//         `${REACT_APP_API_BASE_URL}/user?userId=${currentChatRoom.creatorId}`
+//         `/api/user?userId=${currentChatRoom.creatorId}`
 //       );
 //       setChatCreator(response.data);
 //     };
@@ -71,7 +71,7 @@ const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
     axios
       .all(
         currentChatRoomMembers.map((member) =>
-          axios.get(`${REACT_APP_API_BASE_URL}/user?userId=${member}`)
+          axios.get(`/api/user?userId=${member}`)
         )
       )
       .then((response) => setUsersInfo(response.map((d) => d.data)));
@@ -80,7 +80,7 @@ const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
   useEffect(() => {
     const getChatCreator = async () => {
       const response = await axios.get(
-        `${REACT_APP_API_BASE_URL}/user?userId=${currentChatRoom.creatorId}`
+        `/api/user?userId=${currentChatRoom.creatorId}`
       );
       setChatCreator(response.data);
     };

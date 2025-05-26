@@ -23,17 +23,41 @@ app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 console.log({origin: process.env.CORS_ORIGIN})
 
+// Debugging middleware
+app.use((req, res, next) => {
+  console.log('Incoming request:', {
+    method: req.method,
+    path: req.path,
+    origin: req.headers.origin
+  });
+  next();
+});
+
 // Enhanced CORS configuration
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      process.env.CORS_ORIGIN, 
+      'http://localhost:3000'
+    ];
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      console.log('Allowed origin:', origin);
+      callback(null, true);
+    } else {
+      console.log('Blocked origin:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
   allowedHeaders: ['Content-Type', 'Authorization'],
   optionsSuccessStatus: 200
-}));
+};
 
-// Handle preflight requests
-app.options('*', cors());
+app.use(cors(corsOptions));
+
+// Explicit OPTIONS handler
+app.options('*', cors(corsOptions));
 
 
 app.use(express.json());

@@ -66,7 +66,7 @@ import { io } from "socket.io-client";
 //   useEffect(() => {
 //     const getCurrentChatRoomMessages = async () => {
 //       const response = await axios.get(
-//         `${REACT_APP_API_BASE_URL}/messages/${currentChatRoom._id}`
+//         `/api/messages/${currentChatRoom._id}`
 //       );
 //       setCurrentChatRoomMessages(response.data);
 //     };
@@ -76,7 +76,7 @@ import { io } from "socket.io-client";
 //     const getChatRooms = async () => {
 //       try {
 //         const response = await axios.get(
-//           `${REACT_APP_API_BASE_URL}/chatRooms/${user._id}`
+//           `/api/chatRooms/${user._id}`
 //         );
 //         setChatRooms(response.data);
 //       } catch (error) {
@@ -114,7 +114,7 @@ import { io } from "socket.io-client";
 //       socket.current.emit("sendMessage", socketNewMessage);
 //       try {
 //         const messageSent = await axios.post(
-//           "${REACT_APP_API_BASE_URL}/messages",
+//           "/api/messages",
 //           message
 //         );
 //         setCurrentChatRoomMessages([
@@ -140,7 +140,7 @@ import { io } from "socket.io-client";
 //       data.append("file", fileData);
 //       try {
 //         const response = await axios.post(
-//           "${REACT_APP_API_BASE_URL}/upload",
+//           "/api/upload",
 //           data
 //         );
 //         const messageBody = {
@@ -159,7 +159,7 @@ import { io } from "socket.io-client";
 //         socket.current.emit("sendMessage", socketNewMessage);
 //         try {
 //           const messageResponse = await axios.post(
-//             "${REACT_APP_API_BASE_URL}/messages",
+//             "/api/messages",
 //             messageBody
 //           );
 //           setCurrentChatRoomMessages([
@@ -323,7 +323,7 @@ const ChatPage = () => {
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
-        `${REACT_APP_API_BASE_URL}/messages/${currentChatRoom._id}`
+        `/api/messages/${currentChatRoom._id}`
       );
       setCurrentChatRoomMessages(response.data);
     };
@@ -334,7 +334,7 @@ const ChatPage = () => {
     const getChatRooms = async () => {
       try {
         const response = await axios.get(
-          `${REACT_APP_API_BASE_URL}/chatRooms/${user._id}`
+          `/api/chatRooms/${user._id}`
         );
         setChatRooms(response.data);
       } catch (error) {
@@ -373,7 +373,7 @@ const ChatPage = () => {
       socket.current.emit("sendMessage", socketNewMessage);
       try {
         const messageSent = await axios.post(
-          `${REACT_APP_API_BASE_URL}/messages`,
+          "/api/messages",
           message
         );
         setCurrentChatRoomMessages([
@@ -398,7 +398,7 @@ const ChatPage = () => {
       data.append("file", fileData);
       try {
         const response = await axios.post(
-          `${REACT_APP_API_BASE_URL}/upload`,
+          "/api/upload",
           data
         );
         const messageBody = {
@@ -417,7 +417,7 @@ const ChatPage = () => {
         socket.current.emit("sendMessage", socketNewMessage);
         try {
           const messageResponse = await axios.post(
-            `${REACT_APP_API_BASE_URL}/messages`,
+            "/api/messages",
             messageBody
           );
           setCurrentChatRoomMessages([

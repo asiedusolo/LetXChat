@@ -18,7 +18,7 @@ import "./register.css";
 //   useEffect(() => {
 //     const fetchChatRooms = async () => {
 //       try {
-//         const response = await axios.get("${REACT_APP_API_BASE_URL}/chatRooms");
+//         const response = await axios.get("/api/chatRooms");
 //         setChatRoomIds(response.data.map((chatroom) => chatroom._id));
 //       } catch (error) {
 //         console.log(error);
@@ -41,7 +41,7 @@ import "./register.css";
 //       };
 //       try {
 //         const response = await axios.post(
-//           "${REACT_APP_API_BASE_URL}/auth/register",
+//           "/api/auth/register",
 //           newUser
 //         );
 
@@ -66,7 +66,7 @@ import "./register.css";
 //           .all(
 //             subArray.map((member) =>
 //               axios.put(
-//                 `${REACT_APP_API_BASE_URL}/chatRooms/${member}/${response.data._id}`
+//                 `/api/chatRooms/${member}/${response.data._id}`
 //               )
 //             )
 //           )
@@ -194,7 +194,7 @@ const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await axios.get(`${REACT_APP_API_BASE_URL}/chatRooms`);
+        const response = await axios.get("/api/chatRooms");
         setChatRoomIds(response.data.map((chatroom) => chatroom._id));
       } catch (error) {
         console.log(error);
@@ -217,7 +217,7 @@ const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
       };
       try {
         const response = await axios.post(
-          `${REACT_APP_API_BASE_URL}/auth/register`,
+          "/api/auth/register",
           newUser
         );
         const allChatRoomIds = chatRoomIds;
@@ -241,7 +241,7 @@ const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
           .all(
             subArray.map((member) =>
               axios.put(
-                `${REACT_APP_API_BASE_URL}/chatRooms/${member}/${response.data._id}`
+                `/api/chatRooms/${member}/${response.data._id}`
               )
             )
           )
