@@ -50,7 +50,7 @@ app.use(cors({
 }))
 
 // Explicit OPTIONS handler
-app.options('*', cors(corsOptions));
+// app.options('*', cors(corsOptions));
 
 
 app.use(express.json());
