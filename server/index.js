@@ -17,7 +17,7 @@ const multer = require("multer");
 
 app.use(
   express.urlencoded({
-    limit: '50mb',
+    limit: '500mb',
     extended: false
   })
 );
@@ -64,7 +64,7 @@ app.use(cors({
 // app.options('*', cors(corsOptions));
 
 
-app.use(express.json({ limit: '50mb' }));
+app.use(express.json({ limit: '500mb' }));
 
 
 const storage = multer.diskStorage({
