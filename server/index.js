@@ -6,6 +6,8 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/users");
 const messageRouter = require("./routes/messages");
 const chatRoomRouter = require("./routes/chatRooms");
+const fs = require('fs')
+
 require("dotenv").config();
 const cors = require("cors");
 const path = require("path");
@@ -15,11 +17,17 @@ const multer = require("multer");
 
 app.use(
   express.urlencoded({
+    limit: '50mb',
     extended: false
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+const publicPath = path.join(__dirname, "public/images")
+app.use("/images", express.static(publicPath));
+
+if(!fs.existsSync(publicPath)){
+  fs.mkdirSync(publicPath, { recursive: true });
+}
 
 console.log({origin: process.env.CORS_ORIGIN})
 
@@ -53,7 +61,7 @@ app.use(cors({
 // app.options('*', cors(corsOptions));
 
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
 
 
 const storage = multer.diskStorage({
