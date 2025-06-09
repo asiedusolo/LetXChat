@@ -27,6 +27,7 @@ app.use("/images", express.static(publicPath));
 
 if(!fs.existsSync(publicPath)){
   fs.mkdirSync(publicPath, { recursive: true });
+  console.log('File structure exists!!!!')
 }
 
 console.log({origin: process.env.CORS_ORIGIN})
@@ -54,7 +55,9 @@ console.log({origin: process.env.CORS_ORIGIN})
 
 
 app.use(cors({
-  origin: 'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com'
+  origin: 'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
 // Explicit OPTIONS handler
