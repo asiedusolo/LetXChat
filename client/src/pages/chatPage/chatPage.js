@@ -374,7 +374,7 @@ const ChatPage = () => {
       socket.current.emit("sendMessage", socketNewMessage);
       try {
         const messageSent = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/api/messages`,
+          "/api/messages",
           message
         );
         setCurrentChatRoomMessages([
@@ -399,7 +399,7 @@ const ChatPage = () => {
       data.append("file", fileData);
       try {
         const response = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/api/upload`,
+          "/api/upload",
           data
         );
         const messageBody = {
@@ -418,7 +418,7 @@ const ChatPage = () => {
         socket.current.emit("sendMessage", socketNewMessage);
         try {
           const messageResponse = await axios.post(
-              `${process.env.REACT_APP_API_BASE_URL}/api/messages`,
+            "/api/messages",
             messageBody
           );
           setCurrentChatRoomMessages([
