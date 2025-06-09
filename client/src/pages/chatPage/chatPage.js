@@ -284,6 +284,7 @@ const ChatPage = () => {
   });
   
   useEffect(() => {
+    console.log({socket_url: process.env.REACT_APP_SOCKET_BASE_URL})
     socket.current = io(process.env.REACT_APP_SOCKET_BASE_URL || "http://localhost:8900", {
       path: '/socket.io',
       transports: ['websocket']
