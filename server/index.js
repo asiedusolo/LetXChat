@@ -26,7 +26,7 @@ const s3 = new AWS.S3({
 app.use(
   express.urlencoded({
     limit: '500mb',
-    extended: false
+    extended: true
   })
 );
 app.use(bodyParser.urlencoded({ extended: true }));

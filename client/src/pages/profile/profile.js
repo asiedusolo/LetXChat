@@ -187,7 +187,7 @@ const Profile = () => {
         data
       );
       const updates = {
-        picture_avatar: response.data.filename
+        picture_avatar: response.data.url
       };
       try {
         const userResponse = await axios.put(
