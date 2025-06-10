@@ -127,8 +127,7 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       Bucket: 'backupstoryblok',
       Key: key,
       Body: req.file.buffer,
-      ContentType: req.file.mimetype,
-      ACL: 'public-read'
+      ContentType: req.file.mimetype
     };
 
     const data = await s3.upload(params).promise();
