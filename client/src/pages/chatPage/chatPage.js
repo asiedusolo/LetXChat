@@ -402,7 +402,6 @@ const ChatPage = () => {
           "/api/upload",
           data
         );
-        console.log({response})
         const messageBody = {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,
@@ -414,7 +413,7 @@ const ChatPage = () => {
           chatRoomName: currentChatRoom.chatRoomName,
           senderId: user._id,
           senderUsername: user.username,
-          text: response.data.filename
+          text: response.data.url
         };
         socket.current.emit("sendMessage", socketNewMessage);
         try {
