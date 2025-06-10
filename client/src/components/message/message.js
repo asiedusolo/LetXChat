@@ -107,7 +107,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
           {type === "image" && (
             <img 
               alt="imageMessage" 
-              src={PF + text} 
+              src={text} 
               className={mediaClasses.image} 
             />
             
@@ -118,7 +118,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
               name="media" 
               className={mediaClasses.video}
             >
-              <source src={PF + text} />
+              <source src={text} />
             </video>
           )}
           {type === "audio" && (
@@ -127,7 +127,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
             name="media" 
             className={mediaClasses.audio}
           >
-            <source src={PF + text} />
+            <source src={text} />
           </video>
           )}
         </div>

@@ -407,7 +407,7 @@ const ChatPage = () => {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,
           senderUsername: user.username,
-          text: response.data.filename
+          text: response.data.url
         };
         const socketNewMessage = {
           chatRoomId: currentChatRoom._id,
