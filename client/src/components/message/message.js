@@ -135,11 +135,11 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
     );
   };
 
-  if (text && text.split('.')[text.split('.').length - 2].includes('image')) {
+  if (text && text.includes('image')) {
     return renderMediaMessage("image");
-  } else if (text && text.split('.')[text.split('.').length - 2].includes('audio')) {
+  } else if (text && text.includes('audio')) {
     return renderMediaMessage("audio");
-  } else if (text && text.split('.')[text.split('.').length - 2].includes('video')) {
+  } else if (text && text.includes('video')) {
     return renderMediaMessage("video");
   }
 
