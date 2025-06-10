@@ -96,6 +96,7 @@ const acceptedMimetypes = ["image", "audio", "video"];
 const upload = multer({
   storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
+    console.log({ mimeType: file.mimetype })
     if (!acceptedMimetypes.includes(file.mimetype.substring(0, 5))) {
       return cb(new Error("file is not allowed"));
     }
@@ -120,8 +121,10 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
-    const fileExtension = req.file.originalname.split('.').pop();
-    const key = `uploads/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+    const fileExtension = req.file.originalname.split('.').pop().toLowerCase();
+    const mimeType = req.file.mimetype.substring(0,5)
+    console.log({mimeType2: mimeType})
+    const key = `uploads/${Date.now()}-${mimeType}.${fileExtension}`;
 
     const params = {
       Bucket: 'backupstoryblok',
