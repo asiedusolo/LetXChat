@@ -402,6 +402,7 @@ const ChatPage = () => {
           "/api/upload",
           data
         );
+        console.log({response})
         const messageBody = {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,

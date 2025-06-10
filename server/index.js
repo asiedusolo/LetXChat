@@ -7,6 +7,7 @@ const userRouter = require("./routes/users");
 const messageRouter = require("./routes/messages");
 const chatRoomRouter = require("./routes/chatRooms");
 const fs = require('fs')
+const AWS = require('aws-sdk')
 
 require("dotenv").config();
 const cors = require("cors");
@@ -14,6 +15,13 @@ const path = require("path");
 const bodyParser = require("body-parser");
 
 const multer = require("multer");
+
+const s3 = new AWS.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: 'eu-north-1'
+})
+
 
 app.use(
   express.urlencoded({
@@ -67,38 +75,74 @@ app.use(cors({
 app.use(express.json({ limit: '500mb' }));
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.mimetype.substring(0, 5) +
-        "--" +
-        Date.now() +
-        "--" +
-        file.originalname
-    );
-  }
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, "public/images");
+//   },
+//   filename: (req, file, cb) => {
+//     cb(
+//       null,
+//       file.mimetype.substring(0, 5) +
+//         "--" +
+//         Date.now() +
+//         "--" +
+//         file.originalname
+//     );
+//   }
+// });
 
 const acceptedMimetypes = ["image", "audio", "video"];
 
 const upload = multer({
-  storage: storage,
+  storage: multer.memoryStorage(),
   fileFilter: (req, file, cb) => {
     if (!acceptedMimetypes.includes(file.mimetype.substring(0, 5))) {
       return cb(new Error("file is not allowed"));
     }
     cb(null, true);
+  },
+  limits: {
+    fileSize: 500 * 1024 * 1024
   }
 });
-app.post("/api/upload", upload.single("file"), (req, res) => {
+
+// app.post("/api/upload", upload.single("file"), (req, res) => {
+//   try {
+//     return res.status(200).json(req.file);
+//   } catch (error) {
+//     console.error(error);
+//   }
+// });
+
+app.post("/api/upload", upload.single("file"), async (req, res) => {
   try {
-    return res.status(200).json(req.file);
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
+    }
+
+    const fileExtension = req.file.originalname.split('.').pop();
+    const key = `uploads/${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExtension}`;
+
+    const params = {
+      Bucket: 'backupstoryblok',
+      Key: key,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+      ACL: 'public-read'
+    };
+
+    const data = await s3.upload(params).promise();
+    
+    // Return public URL and key for database storage
+    res.status(200).json({
+      url: data.Location,
+      key: data.Key,
+      filename: req.file.originalname
+    });
+    
   } catch (error) {
-    console.error(error);
+    console.error("Upload error:", error);
+    res.status(500).json({ error: "File upload failed" });
   }
 });
 
