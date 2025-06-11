@@ -13,7 +13,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_API_BASE_URL=http://localhost:5000
       - REACT_APP_SOCKET_URL=http://localhost:8900
     depends_on:
       - server
