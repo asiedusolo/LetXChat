@@ -1,13 +1,10 @@
 FROM node:18-alpine as builder
 
 WORKDIR /app
-COPY package*.json ./
-
-# Install dependencies with specific flags
-RUN npm config set update-notifier false && \
-    npm install --legacy-peer-deps --prefer-offline --no-audit --progress=false
-
-
+COPY package.json .
+# RUN npm install -g npm@8.19.4
+# RUN npm install ajv@6.12.6 ajv-keywords@3.5.2 --save
+RUN npm install
 COPY . .
 RUN npm run build
 
