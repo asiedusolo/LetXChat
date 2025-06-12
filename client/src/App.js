@@ -11,7 +11,7 @@ import ChatPage from "./pages/chatPage/chatPage";
 import Profile from "./pages/profile/profile";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/auth/authcontext";
-// import "./App.css";
+import "./App.css";
 
 function App() {
   const { user } = useContext(AuthContext);
