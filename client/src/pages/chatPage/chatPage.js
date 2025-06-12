@@ -21,6 +21,7 @@ const ChatPage = () => {
   const scrollRef = useRef(null);
   const [fileData, setFileData] = useState();
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+  const REACT_APP_ENV = process.env.REACT_APP_ENV
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -150,18 +151,21 @@ const ChatPage = () => {
           `${REACT_APP_API_BASE_URL}/api/upload`,
           data
         );
+        console.log({REACT_APP_ENV: REACT_APP_ENV})
+        const textData = REACT_APP_ENV === 'development' ? response.data.filename : response.data.url
+        console.log({textData})
         const messageBody = {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,
           senderUsername: user.username,
-          text: response.data.url
+          text: textData
         };
         const socketNewMessage = {
           chatRoomId: currentChatRoom._id,
           chatRoomName: currentChatRoom.chatRoomName,
           senderId: user._id,
           senderUsername: user.username,
-          text: response.data.url
+          text: textData
         };
         socket.current.emit("sendMessage", socketNewMessage);
         try {

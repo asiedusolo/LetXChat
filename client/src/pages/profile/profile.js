@@ -17,6 +17,7 @@ const Profile = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+  const REACT_APP_ENV = process.env.REACT_APP_ENVT
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -45,7 +46,7 @@ const Profile = () => {
         `${REACT_APP_API_BASE_URL}/api/upload`,
         data
       );
-      const updates = { picture_avatar: response.data.url };
+      const updates = { picture_avatar: REACT_APP_ENV === 'development' ? response.data.filename : response.data.url };
       
       const userResponse = await axios.put(
         `${REACT_APP_API_BASE_URL}/api/user/${user._id}`,
@@ -126,8 +127,8 @@ const Profile = () => {
                 <img
                   className="h-32 w-32 rounded-full object-cover border-4 border-white shadow"
                   src={
-                    user && user.picture_avatar
-                      ? PF + `${userPicture || user.picture_avatar}`
+                    user.picture_avatar
+                      ? REACT_APP_ENV === 'development' ? PF + user.picture_avatar : user.picture_avatar
                       : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
                   }
                   alt="Profile"

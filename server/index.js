@@ -40,27 +40,6 @@ if(!fs.existsSync(publicPath)){
 
 console.log({origin: process.env.CORS_ORIGIN})
 
-// // Debugging middleware
-// app.use((req, res, next) => {
-//   console.log('Incoming request:', {
-//     method: req.method,
-//     path: req.path,
-//     origin: req.headers.origin
-//   });
-//   next();
-// });
-
-// // Enhanced CORS configuration
-// const corsOptions = {
-//   origin: [
-//     'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
-//     'http://localhost:3000'
-//   ],
-//   methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-//   credentials: true,
-//   optionsSuccessStatus: 200
-// };
-
 
 app.use(cors({
   origin: ['http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
@@ -70,33 +49,41 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 
-// Explicit OPTIONS handler
-// app.options('*', cors(corsOptions));
 
 
 app.use(express.json({ limit: '500mb' }));
 
 
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, "public/images");
-//   },
-//   filename: (req, file, cb) => {
-//     cb(
-//       null,
-//       file.mimetype.substring(0, 5) +
-//         "--" +
-//         Date.now() +
-//         "--" +
-//         file.originalname
-//     );
-//   }
-// });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "public/images");
+  },
+  filename: (req, file, cb) => {
+    cb(
+      null,
+      file.mimetype.substring(0, 5) +
+        "--" +
+        Date.now() +
+        "--" +
+        file.originalname
+    );
+  }
+});
+
+const dynamicStorage = (req, file, cb) => {
+  if (process.env.NODE_ENV === 'development') {
+    return storage._handleFile(req, file, cb);
+  } else {
+    // For production, use memory storage
+    const memoryStorage = multer.memoryStorage();
+    return memoryStorage._handleFile(req, file, cb);
+  }
+};
 
 const acceptedMimetypes = ["image", "audio", "video"];
 
 const upload = multer({
-  storage: multer.memoryStorage(),
+  storage: { _handleFile: dynamicStorage },
   fileFilter: (req, file, cb) => {
     console.log({ mimeType: file.mimetype })
     if (!acceptedMimetypes.includes(file.mimetype.substring(0, 5))) {
@@ -109,13 +96,6 @@ const upload = multer({
   }
 });
 
-// app.post("/api/upload", upload.single("file"), (req, res) => {
-//   try {
-//     return res.status(200).json(req.file);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// });
 
 app.post("/api/upload", upload.single("file"), async (req, res) => {
   try {
@@ -123,9 +103,19 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "No file uploaded" });
     }
 
+    if (process.env.NODE_ENV === 'development') {
+      // For development, return the file info with the correct path
+      const fileInfo = {
+        ...req.file,
+        path: path.join(__dirname, 'public/images', req.file.filename),
+        url: `/images/${req.file.filename}`
+      };
+      return res.status(200).json(fileInfo);
+    }
+
+    // Production - S3 upload
     const fileExtension = req.file.originalname.split('.').pop().toLowerCase();
-    const mimeType = req.file.mimetype.substring(0,5)
-    console.log({mimeType2: mimeType})
+    const mimeType = req.file.mimetype.substring(0,5);
     const key = `uploads/${Date.now()}-${mimeType}.${fileExtension}`;
 
     const params = {
@@ -137,7 +127,6 @@ app.post("/api/upload", upload.single("file"), async (req, res) => {
 
     const data = await s3.upload(params).promise();
     
-    // Return public URL and key for database storage
     res.status(200).json({
       url: data.Location,
       key: data.Key,

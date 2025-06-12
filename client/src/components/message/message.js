@@ -1,7 +1,10 @@
 import TimeAgo from "react-timeago";
-import { FiImage, FiVideo, FiMusic } from "react-icons/fi";
 
 const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
+  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
+  const REACT_APP_ENV = process.env.REACT_APP_ENV
+
+
   const messageContainerClasses = `flex ${ownMessage ? 'justify-end' : 'justify-start'} mb-4`;
 
   const messageContentClasses = `max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
@@ -25,7 +28,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
           {type === "image" && (
             <div className="mt-2">
               <img 
-                src={text} 
+                src={REACT_APP_ENV === 'development' ? PF + text : text} 
                 alt="Shared content" 
                 className="max-w-full h-auto rounded-md"
               />
@@ -38,7 +41,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
                 controls
                 className="max-w-full h-auto rounded-md"
               >
-                <source src={text} type="video/mp4" />
+                <source src={REACT_APP_ENV === 'development' ? PF + text : text} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
@@ -50,7 +53,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
                 controls
                 className="w-full"
               >
-                <source src={text} type="audio/mpeg" />
+                <source src={REACT_APP_ENV === 'development' ? PF + text : text} type="audio/mpeg" />
                 Your browser does not support the audio element.
               </audio>
             </div>

@@ -27,7 +27,7 @@ const Topbar = () => {
                 className="h-8 w-8 rounded-full"
                 src={
                   user?.picture_avatar
-                    ? PF + user.picture_avatar
+                    ? process.env.REACT_APP_ENV == 'development' ? PF + user.picture_avatar : user.picture_avatar
                     : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
                 }
                 alt="User profile"

@@ -60,7 +60,7 @@ const ChatDetails = ({ currentChatRoom, currentChatRoomMembers }) => {
                 className="w-8 h-8 rounded-full object-cover mr-3"
                 src={
                   member.picture_avatar
-                    ? PF + member.picture_avatar
+                    ? process.env.REACT_APP_ENV == 'development' ? PF + member.picture_avatar : member.picture_avatar
                     : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
                 }
                 alt={member.name}
