@@ -2,19 +2,17 @@ FROM node:18-alpine as builder
 
 WORKDIR /app
 
-# Install system dependencies needed for building
+# Install system dependencies
 RUN apk add --no-cache git
 
-# Install npm packages including devDependencies
+# Copy package files
 COPY package*.json ./
-RUN npm install -g npm@latest && \
-    npm install --legacy-peer-deps --include=dev && \
-    npm install tailwindcss postcss autoprefixer --save-dev
 
-# Copy all files
+# Install compatible npm version
+RUN npm install -g npm@9.8.1 && \
+    npm install --legacy-peer-deps --include=dev
+
 COPY . .
-
-# Build the app
 RUN npm run build
 
 # Production stage
