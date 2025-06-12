@@ -51,7 +51,7 @@ const Login = () => {
                 name="staffEmail"
                 ref={staffEmailRef}
                 placeholder="Staff Email"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
                 required
               />
             </div>
@@ -63,7 +63,7 @@ const Login = () => {
                 ref={passwordRef}
                 placeholder="Password"
                 minLength="6"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg bg-black bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
                 required
               />
             </div>
