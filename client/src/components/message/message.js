@@ -1,75 +1,5 @@
-import "./message.css";
 import TimeAgo from "react-timeago";
-
-// const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
-//   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-//   const mediaTypes = ["image", "audio", "video"];
-
-//   if (text && text.startsWith(mediaTypes[0])) {
-//     return (
-//       <div className={ownMessage ? "message own" : "message"}>
-//         <div className="messageTop">
-//           <div className="userDetails">
-//             <p>{senderUsername}</p>
-//           </div>
-
-//           <TimeAgo className="messageBottom" date={createdAt} />
-//         </div>
-//         <div className="messageContent">
-//           <img alt="imageMessage" src={PF + text} className="messageImage" />
-//         </div>
-//       </div>
-//     );
-//   } else if (text && text.startsWith(mediaTypes[1])) {
-//     return (
-//       <div className={ownMessage ? "message own" : "message"}>
-//         <div className="messageTop">
-//           <div className="userDetails">
-//             <p>{senderUsername}</p>
-//           </div>
-
-//           <TimeAgo className="messageBottom" date={createdAt} />
-//         </div>
-//         <div className="messageContent">
-//           <video controls name="media" className="messgeAudio">
-//             <source src={PF + text} />
-//           </video>
-//         </div>
-//       </div>
-//     );
-//   } else if (text && text.startsWith(mediaTypes[2])) {
-//     return (
-//       <div className={ownMessage ? "message own" : "message"}>
-//         <div className="messageTop">
-//           <div className="userDetails">
-//             <p>{senderUsername}</p>
-//           </div>
-
-//           <TimeAgo className="messageBottom" date={createdAt} />
-//         </div>
-//         <div className="messageContent">
-//           <video controls name="media" className="messageVideo">
-//             <source src={PF + text} />
-//           </video>
-//         </div>
-//       </div>
-//     );
-//   }
-//   return (
-//     <div className={ownMessage ? "message own" : "message"}>
-//       <div className="messageTop">
-//         <div className="userDetails">
-//           <p>{senderUsername}</p>
-//         </div>
-
-//         <TimeAgo className="messageBottom" date={createdAt} />
-//       </div>
-//       <div className="messageContent">
-//         <p className="messageText">{text}</p>
-//       </div>
-//     </div>
-//   );
-// };
+// import "./message.css";
 
 const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
@@ -88,7 +18,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   const renderMediaMessage = (type) => {
     const mediaClasses = {
       image: "w-full max-w-xs h-40 object-cover rounded-lg",
-      audio: "w-full max-w-xs h-12",
+      audio: "w-full max-w-3xl h-12",
       video: "w-full max-w-xs h-40 object-cover rounded-lg"
     };
 
@@ -104,31 +34,42 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
           />
         </div>
         <div className={messageContentClasses}>
-          {type === "image" ? (
+          {type === "image" && (
             <img 
               alt="imageMessage" 
-              src={PF + text} 
+              src={text} 
               className={mediaClasses.image} 
             />
-          ) : (
+            
+          )}
+          {type === "video" && (
             <video 
               controls 
               name="media" 
-              className={mediaClasses[type]}
+              className={mediaClasses.video}
             >
-              <source src={PF + text} />
+              <source src={text} />
             </video>
+          )}
+          {type === "audio" && (
+            <video 
+            controls 
+            name="media" 
+            className={mediaClasses.audio}
+          >
+            <source src={text} />
+          </video>
           )}
         </div>
       </div>
     );
   };
 
-  if (text && text.startsWith(mediaTypes[0])) {
+  if (text && text.includes('image')) {
     return renderMediaMessage("image");
-  } else if (text && text.startsWith(mediaTypes[1])) {
+  } else if (text && text.includes('audio')) {
     return renderMediaMessage("audio");
-  } else if (text && text.startsWith(mediaTypes[2])) {
+  } else if (text && text.includes('video')) {
     return renderMediaMessage("video");
   }
 

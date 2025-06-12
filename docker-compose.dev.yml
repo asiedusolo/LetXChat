@@ -1,4 +1,4 @@
-version: '3.8'
+# version: '3.8'
 
 services:
   client:
@@ -13,6 +13,9 @@ services:
       - /app/node_modules
     environment:
       - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - REACT_APP_API_BASE_URL=http://localhost:5000
+      - REACT_APP_SOCKET_URL=http://localhost:8900
     depends_on:
       - server
       - socket
@@ -23,14 +26,17 @@ services:
       context: ./server
       dockerfile: Dockerfile.dev
     ports:
-      - "5001:5001"
+      - "5000:5000"
     volumes:
       - ./server:/app
       - /app/node_modules
     environment:
       - MONGO_URI=${MONGO_URI}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
       - PORT=5000
       - NODE_ENV=development
+      - CORS_ORIGIN=http://localhost:5000
     restart: unless-stopped
     command: npm run start:dev
 
@@ -39,12 +45,13 @@ services:
       context: ./socket
       dockerfile: Dockerfile.dev
     ports:
-      - "8901:8901"
+      - "8900:8900"
     volumes:
       - ./socket:/app
       - /app/node_modules
     environment:
-      - PORT=8901
+      - PORT=8900
       - NODE_ENV=development
+      - CORS_ORIGIN=http://localhost:3000
     restart: unless-stopped
     command: npm run start:dev
