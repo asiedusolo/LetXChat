@@ -9,13 +9,8 @@ services:
     ports:
       - "80:80"
     environment:
-<<<<<<< HEAD
-      - REACT_APP_API_BASE_URL=${REACT_APP_API_BASE_URL}
-      - REACT_APP_SOCKET_BASE_URL=${REACT_APP_SOCKET_BASE_URL}
-=======
       - REACT_APP_API_BASE_URL=/
       - REACT_APP_SOCKET_URL=/socket.io
->>>>>>> stable-version
     depends_on:
       - server
       - socket
