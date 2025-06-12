@@ -1,91 +1,82 @@
 import TimeAgo from "react-timeago";
-// import "./message.css";
+import { FiImage, FiVideo, FiMusic } from "react-icons/fi";
 
 const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
-  const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const mediaTypes = ["image", "audio", "video"];
+  const messageContainerClasses = `flex ${ownMessage ? 'justify-end' : 'justify-start'} mb-4`;
 
-  const messageContainerClasses = `flex flex-col mt-5 ${
-    ownMessage ? "items-end" : "items-start"
-  }`;
-
-  const messageContentClasses = `max-w-xs rounded-lg p-3 ${
-    ownMessage
-      ? "bg-teal-500 text-white"
-      : "bg-white bg-opacity-20 text-white"
+  const messageContentClasses = `max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+    ownMessage ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-800'
   }`;
 
   const renderMediaMessage = (type) => {
-    const mediaClasses = {
-      image: "w-full max-w-xs h-40 object-cover rounded-lg",
-      audio: "w-full max-w-3xl h-12",
-      video: "w-full max-w-xs h-40 object-cover rounded-lg"
-    };
-
     return (
       <div className={messageContainerClasses}>
-        <div className="flex items-center justify-between w-full max-w-xs mb-1">
-          <p className="text-sm font-medium text-white opacity-80">
-            {senderUsername}
-          </p>
-          <TimeAgo 
-            className="text-xs text-white opacity-60" 
-            date={createdAt} 
-          />
-        </div>
         <div className={messageContentClasses}>
-          {type === "image" && (
-            <img 
-              alt="imageMessage" 
-              src={text} 
-              className={mediaClasses.image} 
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-xs font-medium">
+              {!ownMessage && senderUsername}
+            </span>
+            <TimeAgo 
+              className="text-xs opacity-70" 
+              date={createdAt} 
             />
-            
+          </div>
+          
+          {type === "image" && (
+            <div className="mt-2">
+              <img 
+                src={text} 
+                alt="Shared content" 
+                className="max-w-full h-auto rounded-md"
+              />
+            </div>
           )}
+          
           {type === "video" && (
-            <video 
-              controls 
-              name="media" 
-              className={mediaClasses.video}
-            >
-              <source src={text} />
-            </video>
+            <div className="mt-2">
+              <video 
+                controls
+                className="max-w-full h-auto rounded-md"
+              >
+                <source src={text} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           )}
+          
           {type === "audio" && (
-            <video 
-            controls 
-            name="media" 
-            className={mediaClasses.audio}
-          >
-            <source src={text} />
-          </video>
+            <div className="mt-2">
+              <audio 
+                controls
+                className="w-full"
+              >
+                <source src={text} type="audio/mpeg" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
           )}
         </div>
       </div>
     );
   };
 
-  if (text && text.includes('image')) {
-    return renderMediaMessage("image");
-  } else if (text && text.includes('audio')) {
-    return renderMediaMessage("audio");
-  } else if (text && text.includes('video')) {
-    return renderMediaMessage("video");
-  }
+  if (text?.includes('image')) return renderMediaMessage("image");
+  if (text?.includes('video')) return renderMediaMessage("video");
+  if (text?.includes('audio')) return renderMediaMessage("audio");
 
   return (
     <div className={messageContainerClasses}>
-      <div className="flex items-center justify-between w-full max-w-xs mb-1">
-        <p className="text-sm font-medium text-white opacity-80">
-          {senderUsername}
-        </p>
-        <TimeAgo 
-          className="text-xs text-white opacity-60" 
-          date={createdAt} 
-        />
-      </div>
       <div className={messageContentClasses}>
-        <p className="text-white">{text}</p>
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-xs font-medium">
+            {!ownMessage && senderUsername}
+          </span>
+          <TimeAgo 
+            className="text-xs opacity-70" 
+            date={createdAt} 
+          />
+        </div>
+        <p className="text-sm">{text}</p>
       </div>
     </div>
   );

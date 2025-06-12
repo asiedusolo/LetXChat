@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
-// import "./profile.css";
-
+import { FiUser, FiMail, FiEdit2, FiUpload, FiCheck } from "react-icons/fi";
 
 const Profile = () => {
   const [user, setUser] = useState({});
@@ -13,43 +12,52 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newUsername, setNewUsername] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
-  const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+  const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     const fetchUser = async () => {
-      const response = await axios.get(
-        `/api/user?username=${username}`
-      );
-      setUser(response.data);
-      setUserPicture(response.data.picture_avatar);
+      try {
+        const response = await axios.get(
+          `${REACT_APP_API_BASE_URL}/api/user?username=${username}`
+        );
+        setUser(response.data);
+        setUserPicture(response.data.picture_avatar);
+      } catch (error) {
+        console.error("Error fetching user:", error);
+      }
     };
     fetchUser();
   }, [username]);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
+    if (!fileData) return;
+    
     const data = new FormData();
     data.append("file", fileData);
+    
     try {
       const response = await axios.post(
-        "/api/upload",
+        `${REACT_APP_API_BASE_URL}/api/upload`,
         data
       );
-      const updates = {
-        picture_avatar: response.data.url
-      };
-      try {
-        const userResponse = await axios.put(
-          `/api/user/${user._id}`,
-          updates
-        );
-        setUserPicture(userResponse.data.picture_avatar);
-      } catch (error) {
-        console.log(error);
-      }
+      const updates = { picture_avatar: response.data.url };
+      
+      const userResponse = await axios.put(
+        `${REACT_APP_API_BASE_URL}/api/user/${user._id}`,
+        updates
+      );
+      setUserPicture(userResponse.data.picture_avatar);
+      setSuccessMessage("Profile picture updated successfully!");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      console.log(error);
+      console.error("Error uploading image:", error);
+      setErrorMessage("Failed to update profile picture");
+      setTimeout(() => setErrorMessage(""), 3000);
     }
   };
 
@@ -59,138 +67,195 @@ const Profile = () => {
 
   const handleUserProfileEdit = async (e) => {
     e.preventDefault();
-    let updates;
-    if (password && password === confirmPassword && username) {
-      updates = {
-        username: profileUserName,
-        password: password
-      };
-    } else if (password && password === confirmPassword && !username) {
-      updates = {
-        password: password
-      };
-    } else if (username && !password) {
-      updates = {
-        username: profileUserName
-      };
+    setIsSubmitting(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+    
+    let updates = {};
+    if (password) {
+      if (password !== confirmPassword) {
+        setErrorMessage("Passwords do not match");
+        setTimeout(() => setErrorMessage(""), 3000);
+        setIsSubmitting(false);
+        return;
+      }
+      updates.password = password;
+    }
+    
+    if (profileUserName) {
+      updates.username = profileUserName;
     }
 
     try {
       const response = await axios.put(
-        `/api/user/${user._id}`,
+        `${REACT_APP_API_BASE_URL}/api/user/${user._id}`,
         updates
       );
       setNewUsername(response.data.username);
       setProfileUserName("");
-      alert("Details updated successfully");
+      setPassword("");
+      setConfirmPassword("");
+      setSuccessMessage("Profile updated successfully!");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
-      console.log(error);
-      alert("Username already exists or password mismatch");
+      console.error("Error updating profile:", error);
+      setErrorMessage(error.response?.data?.message || "Failed to update profile");
+      setTimeout(() => setErrorMessage(""), 3000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-teal-400 p-4 md:p-8">
-      {/* Wave Divider at Top (Matches Other Pages) */}
-      <div className="w-full overflow-hidden rotate-180 absolute top-0">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="fill-current text-white w-full h-16 md:h-24"
-        >
-          <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
-          <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
-          <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
-        </svg>
-      </div>
-
-      <div className="flex flex-col lg:flex-row justify-center items-start gap-8 max-w-6xl mx-auto mt-12">
-        {/* Profile Data Section */}
-        <div className="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-xl shadow-xl p-6 flex flex-col items-center">
-          <h3 className="text-2xl font-bold text-white mb-4">{user.name}</h3>
-          
-          <img
-            alt="profilePic"
-            src={
-              user && user.picture_avatar
-                ? PF + `${userPicture ? userPicture : user.picture_avatar}`
-                : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-            }
-            className="h-64 w-64 rounded-full object-cover border-4 border-white border-opacity-30 mb-4"
-          />
-          
-          <h3 className="text-xl font-semibold text-white mb-2">
-            @{newUsername ? newUsername : user.username}
-          </h3>
-          
-          <h3 className="text-lg text-white mb-6">{user.staff_email}</h3>
-          
-          <form onSubmit={onSubmitHandler} className="w-full max-w-xs">
-            <div className="mb-4">
-              <input
-                type="file"
-                name="picturePicture"
-                onChange={fileChangeHandler}
-                className="w-full text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-white file:text-teal-600 hover:file:bg-gray-100"
-              />
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full bg-white text-teal-600 hover:bg-gray-100 font-bold py-2 px-4 rounded-full transition duration-200 shadow-md hover:shadow-lg"
-            >
-              Change Profile Picture
-            </button>
-          </form>
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Profile Settings</h1>
+          <p className="mt-2 text-sm text-gray-600">
+            Manage your account information and preferences
+          </p>
         </div>
 
-        {/* Profile Edit Section */}
-        <div className="w-full lg:w-1/2 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-xl shadow-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-6 text-center">Edit Profile</h2>
-          
-          <form onSubmit={handleUserProfileEdit} className="space-y-4">
-            <div>
-              <input
-                type="text"
-                name="username"
-                placeholder="New Username"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
-                value={profileUserName}
-                onChange={(e) => setProfileUserName(e.target.value)}
-              />
+        <div className="bg-white shadow rounded-lg overflow-hidden">
+          {/* Profile Section */}
+          <div className="px-6 py-8 border-b border-gray-200">
+            <div className="flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-6">
+              {/* Profile Picture */}
+              <div className="flex-shrink-0">
+                <img
+                  className="h-32 w-32 rounded-full object-cover border-4 border-white shadow"
+                  src={
+                    user && user.picture_avatar
+                      ? PF + `${userPicture || user.picture_avatar}`
+                      : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                  }
+                  alt="Profile"
+                />
+                <form onSubmit={onSubmitHandler} className="mt-4">
+                  <div className="flex items-center space-x-2">
+                    <label className="cursor-pointer">
+                      <span className="sr-only">Change profile picture</span>
+                      <input
+                        type="file"
+                        onChange={fileChangeHandler}
+                        className="hidden"
+                        accept="image/*"
+                      />
+                      <span className="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <FiUpload className="-ml-0.5 mr-2 h-4 w-4" />
+                        Change
+                      </span>
+                    </label>
+                    {fileData && (
+                      <button
+                        type="submit"
+                        className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        <FiCheck className="-ml-0.5 mr-2 h-4 w-4" />
+                        Save
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
+
+              {/* Profile Info */}
+              <div className="flex-1">
+                <h2 className="text-xl font-semibold text-gray-900">{user.name}</h2>
+                <div className="mt-2 flex items-center text-sm text-gray-500">
+                  <FiUser className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                  @{newUsername || user.username}
+                </div>
+                <div className="mt-1 flex items-center text-sm text-gray-500">
+                  <FiMail className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                  {user.staff_email}
+                </div>
+              </div>
             </div>
-            
-            <div>
-              <input
-                type="password"
-                name="password"
-                placeholder="New Password"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </div>
-            
-            <div>
-              <input
-                type="password"
-                name="confirmPassword"
-                placeholder="Confirm Password"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 placeholder-opacity-80 focus:outline-none focus:ring-2 focus:ring-yellow-300 focus:ring-opacity-50"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </div>
-            
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full bg-white text-teal-600 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-[1.02] shadow-lg hover:shadow-xl"
-              >
-                Update Profile
-              </button>
-            </div>
-          </form>
+          </div>
+
+          {/* Edit Profile Form */}
+          <div className="px-6 py-8">
+            <h3 className="text-lg font-medium text-gray-900 mb-6">
+              <FiEdit2 className="inline mr-2" />
+              Edit Profile
+            </h3>
+
+            {/* Status Messages */}
+            {successMessage && (
+              <div className="mb-4 p-3 bg-green-50 text-green-700 rounded-md text-sm">
+                {successMessage}
+              </div>
+            )}
+            {errorMessage && (
+              <div className="mb-4 p-3 bg-red-50 text-red-700 rounded-md text-sm">
+                {errorMessage}
+              </div>
+            )}
+
+            <form onSubmit={handleUserProfileEdit} className="space-y-6">
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  id="username"
+                  value={profileUserName}
+                  onChange={(e) => setProfileUserName(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Enter new username"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                  New Password
+                </label>
+                <input
+                  type="password"
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Enter new password"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  id="confirmPassword"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Confirm new password"
+                />
+              </div>
+
+              <div className="pt-2">
+                <button
+                  type="submit"
+                  disabled={isSubmitting || (!profileUserName && !password)}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Updating...
+                    </>
+                  ) : "Update Profile"}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>

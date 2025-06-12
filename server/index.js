@@ -63,7 +63,9 @@ console.log({origin: process.env.CORS_ORIGIN})
 
 
 app.use(cors({
-  origin: 'http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
+  origin: ['http://ec2-13-61-184-107.eu-north-1.compute.amazonaws.com',
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }))

@@ -1,8 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom"; // Changed from useHistory
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-// import "./register.css";
 
 const Register = () => {
   const fullNameRef = useRef(null);
@@ -11,15 +10,17 @@ const Register = () => {
   const staffEmailRef = useRef(null);
   const passwordRef = useRef(null);
   const passwordConfirmRef = useRef(null);
-  const navigate = useNavigate(); // Changed from useHistory
+  const navigate = useNavigate();
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [chatRoomIds, setChatRoomIds] = useState([]);
+  const [error, setError] = useState(null);
+   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchChatRooms = async () => {
       try {
-        const response = await axios.get("/api/chatRooms");
+        const response = await axios.get(`${REACT_APP_API_BASE_URL}/api/chatRooms`);
         setChatRoomIds(response.data.map((chatroom) => chatroom._id));
       } catch (error) {
         console.log(error);
@@ -30,22 +31,30 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true)
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
+      setError({ message: "Passwords do not match" });
       passwordConfirmRef.current.setCustomValidity("Password mismatch");
-    } else {
-      const newUser = {
-        name: fullNameRef.current.value,
-        employee_id: emloyeeIdRef.current.value,
-        username: usernameRef.current.value,
-        staff_email: staffEmailRef.current.value,
-        password: passwordRef.current.value
-      };
-      try {
-        const response = await axios.post(
-          "/api/auth/register",
-          newUser
-        );
-        const allChatRoomIds = chatRoomIds;
+      return;
+    }
+    
+    setError(null);
+    
+    const newUser = {
+      name: fullNameRef.current.value,
+      employee_id: emloyeeIdRef.current.value,
+      username: usernameRef.current.value,
+      staff_email: staffEmailRef.current.value,
+      password: passwordRef.current.value
+    };
+    
+    try {
+      const response = await axios.post(
+        `${REACT_APP_API_BASE_URL}/api/auth/register`,
+        newUser
+      );
+      
+      const allChatRoomIds = chatRoomIds;
         const randomInt =
           Math.floor(Math.random() * (allChatRoomIds.length - 1 - 3 + 1)) + 3;
         function getRandomSubarray(arr, size) {
@@ -66,121 +75,159 @@ const Register = () => {
           .all(
             subArray.map((member) =>
               axios.put(
-                `/api/chatRooms/${member}/${response.data._id}`
+                `${REACT_APP_API_BASE_URL}/api/chatRooms/${member}/${response.data._id}`
               )
             )
           )
           .then((response) => console.log("Joined chat rooms select"));
-
-        navigate("/login"); // Changed from history.push
-      } catch (error) {
-        console.log(error);
-      }
+      
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+      setError({ 
+        message: error.response?.data?.message || "Registration failed. Please try again." 
+      });
     }
   };
 
-   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-teal-400 flex flex-col items-center justify-center p-4">
+  return (
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        <h1 className="text-4xl font-bold text-white mb-2 self-start ml-4">
-          Let<span className="text-yellow-300">X</span>Chat
-        </h1>
-        
-        <div className="bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg rounded-xl shadow-xl p-8 w-full">
-          <h3 className="text-2xl font-semibold text-white text-center mb-6">
-            Enter your details to sign up
-          </h3>
+        {/* Logo/Branding */}
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">
+            Let<span className="text-blue-600">X</span>Chat
+          </h1>
+          <p className="mt-2 text-gray-600">Join your team's communication hub</p>
+        </div>
+
+        {/* Card Container */}
+        <div className="bg-white rounded-xl shadow-md p-8">
+          <h2 className="text-2xl font-bold text-gray-900 text-center mb-6">
+            Create your account
+          </h2>
           
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm">
+              {error.message}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
+              <label htmlFor="fullname" className="block text-sm font-medium text-gray-700 mb-1">
+                Full Name
+              </label>
               <input
                 type="text"
-                name="fullname"
+                id="fullname"
                 ref={fullNameRef}
-                placeholder="Full Name"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="John Doe"
                 required
               />
             </div>
-            
+
             <div>
+              <label htmlFor="employeeId" className="block text-sm font-medium text-gray-700 mb-1">
+                Employee ID
+              </label>
               <input
                 type="text"
-                name="employeeId"
+                id="employeeId"
                 ref={emloyeeIdRef}
-                placeholder="Employee ID"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="EMP12345"
                 required
               />
             </div>
-            
+
             <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
+                Username
+              </label>
               <input
                 type="text"
-                name="username"
+                id="username"
                 ref={usernameRef}
                 minLength="3"
                 maxLength="20"
-                placeholder="Username"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="johndoe"
                 required
               />
             </div>
-            
+
             <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                Email Address
+              </label>
               <input
                 type="email"
-                name="staffEmail"
-                maxLength="50"
+                id="email"
                 ref={staffEmailRef}
-                placeholder="Email"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                maxLength="50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="your@email.com"
                 required
               />
             </div>
-            
+
             <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+                Password
+              </label>
               <input
                 type="password"
-                name="password"
+                id="password"
                 ref={passwordRef}
                 minLength="6"
-                placeholder="Enter Password"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="••••••••"
                 required
               />
             </div>
-            
+
             <div>
+              <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                Confirm Password
+              </label>
               <input
                 type="password"
-                name="passwordConfirm"
+                id="confirmPassword"
                 ref={passwordConfirmRef}
-                placeholder="Confirm Password"
-                className="w-full px-4 py-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
+                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                placeholder="••••••••"
                 required
               />
             </div>
-            
-            <div className="pt-2">
-              <button
-                type="submit"
-                className="w-full bg-white text-teal-600 hover:bg-gray-100 font-bold py-3 px-4 rounded-lg transition duration-200 ease-in-out transform hover:scale-105"
-              >
-                Sign up
-              </button>
-              
-              <p className="text-white text-center mt-4">
-                Already have an account?{" "}
-                <Link
-                  to="/login"
-                  className="font-bold text-yellow-300 hover:text-yellow-200 underline"
-                >
-                  Log In
-                </Link>
-              </p>
-            </div>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-70"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center justify-center">
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Creating account...
+                </span>
+              ) : "Create account"}
+            </button>
           </form>
+
+          <div className="mt-6 text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <Link 
+              to="/login" 
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign in
+            </Link>
+          </div>
         </div>
       </div>
     </div>

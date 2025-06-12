@@ -1,24 +1,25 @@
-import React from 'react'
-// import './chatRoom.css'
+import React from 'react';
+import { FiMessageSquare } from 'react-icons/fi';
 
-
-const ChatRoom = ({ chatRoomName, chatRoom, avatarUrl, handleChatRoomSelect }) => {
+const ChatRoom = ({ chatRoom, handleChatRoomSelect }) => {
     return (
         <div 
-            className="flex items-center p-3 my-2 rounded-lg transition-colors duration-200 hover:bg-white hover:bg-opacity-20 cursor-pointer"
+            className="flex items-center p-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
             onClick={() => handleChatRoomSelect(chatRoom)}
         >
-            <img 
-                src={avatarUrl === "" ? 
-                    `https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3KNxefYnky1ecrnryOJUJ6Gjun5IN7rHZoA&usqp=CAU` : 
-                    avatarUrl} 
-                alt={chatRoomName}
-                className="w-10 h-10 rounded-full object-cover mr-4 border border-white border-opacity-30"
-            />
-            <span className="text-white font-medium">{chatRoomName}</span>
+            <div className="flex-shrink-0 h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                <FiMessageSquare className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="min-w-0">
+                <p className="text-sm font-medium text-gray-900 truncate">
+                    {chatRoom.chatRoomName}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                    {chatRoom.members.length} members
+                </p>
+            </div>
         </div>
-    )
-}
+    );
+};
 
-
-export default ChatRoom
+export default ChatRoom;

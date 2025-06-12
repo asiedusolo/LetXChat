@@ -6,7 +6,7 @@ import { React, useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import { io } from "socket.io-client";
-// import "./chatPage.css";
+import { FiSend, FiPaperclip, FiSearch } from "react-icons/fi";
 
 
 const ChatPage = () => {
@@ -72,7 +72,7 @@ const ChatPage = () => {
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
-        `/api/messages/${currentChatRoom._id}`
+        `${REACT_APP_API_BASE_URL}/api/messages/${currentChatRoom._id}`
       );
       setCurrentChatRoomMessages(response.data);
     };
@@ -83,7 +83,7 @@ const ChatPage = () => {
     const getChatRooms = async () => {
       try {
         const response = await axios.get(
-          `/api/chatRooms/${user._id}`
+          `${REACT_APP_API_BASE_URL}/api/chatRooms/${user._id}`
         );
         setChatRooms(response.data);
       } catch (error) {
@@ -122,7 +122,7 @@ const ChatPage = () => {
       socket.current.emit("sendMessage", socketNewMessage);
       try {
         const messageSent = await axios.post(
-          "/api/messages",
+          `${REACT_APP_API_BASE_URL}/api/messages`,
           message
         );
         setCurrentChatRoomMessages([
@@ -147,7 +147,7 @@ const ChatPage = () => {
       data.append("file", fileData);
       try {
         const response = await axios.post(
-          "/api/upload",
+          `${REACT_APP_API_BASE_URL}/api/upload`,
           data
         );
         const messageBody = {
@@ -166,7 +166,7 @@ const ChatPage = () => {
         socket.current.emit("sendMessage", socketNewMessage);
         try {
           const messageResponse = await axios.post(
-            "/api/messages",
+            `${REACT_APP_API_BASE_URL}/api/messages`,
             messageBody
           );
           setCurrentChatRoomMessages([
@@ -184,111 +184,117 @@ const ChatPage = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-screen bg-gray-50">
       <Topbar />
 
       <div className="flex flex-1 overflow-hidden">
         {/* Chat Rooms Sidebar */}
-        <div className="w-1/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg border-r border-white border-opacity-30 overflow-y-auto">
+        <div className="w-64 bg-white border-r border-gray-200 overflow-y-auto">
           <div className="p-4">
-            <input 
-              placeholder="Search for Rooms" 
-              className="w-full p-2 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-            />
-            <div className="mt-4 space-y-2">
-              {chatRooms.map((chatRoom) => (
-                <div key={chatRoom._id}>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FiSearch className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                placeholder="Search rooms..."
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              />
+            </div>
+            <div className="mt-4">
+              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                Your Chat Rooms
+              </h3>
+              <div className="mt-2 space-y-1">
+                {chatRooms.map((chatRoom) => (
                   <ChatRoom
-                    {...chatRoom}
+                    key={chatRoom._id}
                     chatRoom={chatRoom}
                     handleChatRoomSelect={handleChatRoomSelect}
                   />
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
           </div>
         </div>
 
         {/* Main Chat Area */}
-        <div className="flex-1 flex flex-col bg-white bg-opacity-10 backdrop-filter backdrop-blur-sm">
-          <div className="flex-1 overflow-y-auto p-4">
-            {currentChatRoomMessages.length > 0 ? (
-              currentChatRoomMessages.map((message) => (
-                <div key={message._id} ref={scrollRef}>
-                  <Message
-                    {...message}
-                    user={user}
-                    ownMessage={user._id === message.senderId}
-                  />
+        <div className="flex-1 flex flex-col bg-white">
+          {currentChatRoom._id ? (
+            <>
+              <div className="flex-1 overflow-y-auto p-4">
+                <div className="max-w-3xl mx-auto space-y-4">
+                  {currentChatRoomMessages.map((message) => (
+                    <div key={message._id} ref={scrollRef}>
+                      <Message
+                        {...message}
+                        user={user}
+                        ownMessage={user._id === message.senderId}
+                      />
+                    </div>
+                  ))}
                 </div>
-              ))
-            ) : (
-              <div className="h-full flex items-center justify-center">
-                <span className="text-xl text-white opacity-70">
-                  Open a chat room to access chat messages
-                </span>
               </div>
-            )}
-          </div>
 
-          {/* Message Input Area */}
-          <div className="p-4 border-t border-white border-opacity-20">
-            <form onSubmit={onSubmitHandler} className="flex items-center gap-2 mb-2">
-              <input
-                type="file"
-                name="mediaFile"
-                onChange={fileChangeHandler}
-                className="hidden"
-                id="file-upload"
-              />
-              <label 
-                htmlFor="file-upload"
-                className="bg-white text-teal-600 px-3 py-2 rounded-lg cursor-pointer hover:bg-gray-100 transition"
-              >
-                Attach
-              </label>
-              <button 
-                type="submit"
-                className="bg-white text-teal-600 px-3 py-2 rounded-lg hover:bg-gray-100 transition"
-              >
-                Send Media
-              </button>
-            </form>
-            <div className="flex gap-2">
-              <textarea
-                className="flex-1 p-3 rounded-lg bg-white bg-opacity-20 border border-white border-opacity-30 text-white placeholder-yellow-300 focus:outline-none focus:ring-2 focus:ring-yellow-300 resize-none"
-                placeholder="Type your message here"
-                value={newMessage}
-                rows={3}
-                onChange={(e) => setNewMessage(e.target.value)}
-              ></textarea>
-              <button 
-                onClick={sendMessage}
-                className="bg-white text-teal-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition self-end"
-              >
-                Send
-              </button>
+              <div className="border-t border-gray-200 p-4">
+                <form onSubmit={onSubmitHandler} className="mb-2">
+                  <div className="flex items-center">
+                    <label className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
+                      <FiPaperclip className="h-5 w-5 text-gray-500" />
+                      <input
+                        type="file"
+                        name="mediaFile"
+                        onChange={fileChangeHandler}
+                        className="hidden"
+                        id="file-upload"
+                      />
+                    </label>
+                    <button
+                      type="submit"
+                      className="ml-2 px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+                    >
+                      Send File
+                    </button>
+                  </div>
+                </form>
+                <form onSubmit={sendMessage} className="flex">
+                  <input
+                    className="flex-1 border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Type your message..."
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                  />
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                  >
+                    <FiSend className="h-5 w-5" />
+                  </button>
+                </form>
+              </div>
+            </>
+          ) : (
+            <div className="flex-1 flex items-center justify-center bg-gray-50">
+              <div className="text-center">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Select a chat room
+                </h3>
+                <p className="mt-1 text-sm text-gray-500">
+                  Choose a conversation from the sidebar to get started
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         {/* Chat Details Sidebar */}
-        <div className="w-1/4 bg-white bg-opacity-20 backdrop-filter backdrop-blur-lg border-l border-white border-opacity-30 overflow-y-auto">
-          <div className="p-4">
-            {currentChatRoom.chatRoomName ? (
-              <ChatDetails
-                currentChatRoom={currentChatRoom}
-                currentChatRoomMembers={currentChatRoomMembers}
-              />
-            ) : (
-              <div className="h-full flex items-center justify-center">
-                <span className="text-xl text-white opacity-70">
-                  Click on a chat room to display details
-                </span>
-              </div>
-            )}
+        {currentChatRoom._id && (
+          <div className="w-64 bg-white border-l border-gray-200 overflow-y-auto">
+            <ChatDetails
+              currentChatRoom={currentChatRoom}
+              currentChatRoomMembers={currentChatRoomMembers}
+            />
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

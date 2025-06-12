@@ -1,74 +1,142 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
-// import "./landingPage.css";
 
 const LandingPage = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 to-teal-400 font-sans">
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12 flex flex-col lg:flex-row items-center justify-between min-h-[90vh]">
-        {/* Left Column - Image */}
-        <div className="w-full lg:w-1/2 mb-12 lg:mb-0 lg:pr-8">
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl transform hover:scale-[1.01] transition-all duration-300">
-            <img
-              src="https://media.istockphoto.com/id/1142207515/photo/smiling-african-american-woman-chatting-on-smartphone-modern-technology-app.webp?b=1&s=170667a&w=0&k=20&c=HV2kHRP5nv3KXd-AlbCFLe8FOLGYpNDJareJ0OrvcNA="
-              alt="People chatting on LetXChat"
-              className="w-full h-auto object-cover rounded-2xl"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+    <div className="min-h-screen bg-gray-50">
+      {/* Navigation Bar */}
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <div className="flex-shrink-0 flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">
+                Let<span className="text-blue-600">X</span>Chat
+              </h1>
+            </div>
+            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+              <Link
+                to="/login"
+                className="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              >
+                Sign in
+              </Link>
+              <Link
+                to="/register"
+                className="border-blue-500 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium"
+              >
+                Get started
+              </Link>
+            </div>
           </div>
         </div>
+      </nav>
 
-        {/* Right Column - Text Content */}
-        <div className="w-full lg:w-1/2 lg:pl-8 text-white">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
-            Let<span className="text-yellow-300">X</span>Chat
-          </h1>
+      {/* Hero Section */}
+      <div className="relative bg-white overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          <div className="relative z-10 pb-8 bg-white sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
+            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
+              <div className="sm:text-center lg:text-left">
+                <h1 className="text-4xl tracking-tight font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
+                  <span className="block">Connect and</span>
+                  <span className="block text-blue-600">collaborate</span>
+                </h1>
+                <p className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0">
+                  LetXChat is your team's communication hub. Exchange messages, photos,
+                  audio, and videos seamlessly with colleagues across your organization.
+                </p>
+                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
+                  <div className="rounded-md shadow">
+                    <Link
+                      to="/register"
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 md:py-4 md:text-lg md:px-10"
+                    >
+                      Get started <FiArrowRight className="ml-2" />
+                    </Link>
+                  </div>
+                  <div className="mt-3 sm:mt-0 sm:ml-3">
+                    <Link
+                      to="/login"
+                      className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-700 bg-blue-100 hover:bg-blue-200 md:py-4 md:text-lg md:px-10"
+                    >
+                      Sign in
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+          <img
+            className="h-56 w-full object-cover sm:h-72 md:h-96 lg:w-full lg:h-full"
+            src="https://media.istockphoto.com/id/1142207515/photo/smiling-african-american-woman-chatting-on-smartphone-modern-technology-app.webp?b=1&s=170667a&w=0&k=20&c=HV2kHRP5nv3KXd-AlbCFLe8FOLGYpNDJareJ0OrvcNA="
+            alt="Team collaborating"
+          />
+        </div>
+      </div>
 
-          <div className="mb-8">
-            <p className="text-4xl md:text-5xl font-bold mb-2">Connect</p>
-            <p className="text-2xl md:text-3xl mb-2">
-              and <span className="font-semibold text-yellow-300">share</span> with
+      {/* Features Section */}
+      <div className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:text-center">
+            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase">Features</h2>
+            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              A better way to communicate
             </p>
-            <p className="text-3xl md:text-4xl font-bold">colleagues</p>
           </div>
 
-          <p className="text-lg md:text-xl mb-10 leading-relaxed">
-            LetXChat is an instant group messaging app where you can connect with your team.
-            Create an account, join your groups, and exchange messages, photos,
-            audio, and videos seamlessly.
-          </p>
+          <div className="mt-10">
+            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-8 md:gap-y-10">
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Instant Messaging</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Real-time chat with your team members, with support for emojis and reactions.
+                </p>
+              </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Link
-              to="/register"
-              className="bg-white text-teal-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl hover:scale-[1.02]"
-            >
-              Get Started <FiArrowRight className="inline" />
-            </Link>
-            <Link
-              to="/login"
-              className="border-2 border-white text-white hover:bg-white/10 px-8 py-4 rounded-lg font-bold text-lg transition-all flex items-center justify-center shadow-lg hover:shadow-xl hover:scale-[1.02]"
-            >
-              Login
-            </Link>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
+                  </svg>
+                </div>
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Group Channels</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Organized spaces for different teams, projects, or topics.
+                </p>
+              </div>
+
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-blue-500 text-white">
+                  <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z" />
+                  </svg>
+                </div>
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">File Sharing</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Share documents, images, and other files with your team effortlessly.
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Wave Divider */}
-      <div className="w-full overflow-hidden">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="fill-current text-white w-full h-16 md:h-24"
-        >
-          <path d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z" opacity=".25"></path>
-          <path d="M0,0V15.81C13,36.92,27.64,56.86,47.69,72.05,99.41,111.27,165,111,224.58,91.58c31.15-10.15,60.09-26.07,89.67-39.8,40.92-19,84.73-46,130.83-49.67,36.26-2.85,70.9,9.42,98.6,31.56,31.77,25.39,62.32,62,103.63,73,40.44,10.79,81.35-6.69,119.13-24.28s75.16-39,116.92-43.05c59.73-5.85,113.28,22.88,168.9,38.84,30.2,8.66,59,6.17,87.09-7.5,22.43-10.89,48-26.93,60.65-49.24V0Z" opacity=".5"></path>
-          <path d="M0,0V5.63C149.93,59,314.09,71.32,475.83,42.57c43-7.64,84.23-20.12,127.61-26.46,59-8.63,112.48,12.24,165.56,35.4C827.93,77.22,886,95.24,951.2,90c86.53-7,172.46-45.71,248.8-84.81V0Z"></path>
-        </svg>
-      </div>
+      {/* Footer */}
+      <footer className="bg-gray-50">
+        <div className="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">
+          <p className="mt-8 text-center text-base text-gray-400">
+            &copy; {new Date().getFullYear()} LetXChat. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 };

@@ -1,43 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { AuthContext } from "../../contexts/auth/authcontext.js";
-// import "./topbar.css";
-
+import { AuthContext } from "../../contexts/auth/authcontext";
 
 const Topbar = () => {
   const { user } = useContext(AuthContext);
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
 
   return (
-    <div className="w-full h-16 bg-gradient-to-r from-blue-500 to-teal-400 shadow-md">
-      <div className="container mx-auto px-4 h-full flex justify-between items-center">
-        {/* Logo */}
-        <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-white">
-            Let<span className="text-yellow-300">X</span>Chat
-          </h1>
-        </div>
+    <div className="bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          {/* Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <h1 className="text-xl font-bold text-gray-900">
+              Let<span className="text-blue-600">X</span>Chat
+            </h1>
+          </div>
 
-        {/* User Profile */}
-        <div className="flex items-center space-x-4">
-          <span className="text-white font-medium">{user.name}</span>
-          <Link to={`/profile/${user.username}`}>
-            <img
-              alt="userPicture"
-              src={
-                user && user.picture_avatar
-                  ? PF + user.picture_avatar
-                  : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
-              }
-              className="w-10 h-10 rounded-full object-cover border-2 border-white border-opacity-50 hover:border-opacity-100 transition-all"
-            />
-          </Link>
+          {/* User Profile */}
+          <div className="flex items-center">
+            <span className="text-sm font-medium text-gray-700 mr-3">
+              {user.name}
+            </span>
+            <Link to={`/profile/${user.username}`} className="flex-shrink-0">
+              <img
+                className="h-8 w-8 rounded-full"
+                src={
+                  user?.picture_avatar
+                    ? PF + user.picture_avatar
+                    : "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
+                }
+                alt="User profile"
+              />
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default Topbar;
