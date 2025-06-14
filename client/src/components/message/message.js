@@ -4,7 +4,8 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
   const PF = process.env.REACT_APP_PUBLIC_FOLDER;
   const REACT_APP_ENV = process.env.REACT_APP_ENV
 
-
+  console.log({REACT_APP_ENV})
+  console.log({text})
   const messageContainerClasses = `flex ${ownMessage ? 'justify-end' : 'justify-start'} mb-4`;
 
   const messageContentClasses = `max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
