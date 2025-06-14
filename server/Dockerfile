@@ -4,8 +4,7 @@ WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm config set registry https://registry.npmjs.org/ && \
-    npm install --legacy-peer-deps --retry 3 --retry-delay 5000
+RUN npm install
 
 COPY . .
 
