@@ -11,6 +11,7 @@ import ChatPage from "./pages/chatPage/chatPage";
 import Profile from "./pages/profile/profile";
 import { useContext } from "react";
 import { AuthContext } from "./contexts/auth/authcontext";
+import VerifyEmail from "./pages/register/verifyEmail";
 import "./App.css";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/verify-email" element={<VerifyEmail />} />
         <Route 
           path="/login" 
           element={user ? <Navigate to="/chatroom" replace /> : <Login />} 

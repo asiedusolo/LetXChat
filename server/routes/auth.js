@@ -10,7 +10,7 @@ const saltRounds = 10;
 
 router.post("/register", async (req, res) => {
   try {
-    
+
     const emailExists = await User.exists({
       staff_email: req.body.staff_email,
     });
@@ -18,7 +18,7 @@ router.post("/register", async (req, res) => {
     if (emailExists || usernameExists) {
       return res.status(400).json({ msg: "User already exists" });
     }
-    
+
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPswd = await bcrypt.hash(req.body.password, salt);
 
@@ -27,42 +27,42 @@ router.post("/register", async (req, res) => {
     verificationTokenExpires.setHours(verificationTokenExpires.getHours() + 24)
 
     const newUser = new User({
-        name: req.body.name,
-        employee_id: req.body.employee_id,
-        username: req.body.username,
-        staff_email: req.body.staff_email,
-        password: hashedPswd,
-        verificationToken,
-        verificationTokenExpires
-      });
+      name: req.body.name,
+      employee_id: req.body.employee_id,
+      username: req.body.username,
+      staff_email: req.body.staff_email,
+      password: hashedPswd,
+      verificationToken: verificationToken,
+      verificationTokenExpires: verificationTokenExpires
+    });
 
-      const user = await newUser.save();
+    const user = await newUser.save();
 
-      const pendingInvitations = await Invitation.find({
-        email: user.staff_email,
-        status: 'pending',
-        expiresAt: { $gt: new Date() }
+    const pendingInvitations = await Invitation.find({
+      email: user.staff_email,
+      status: 'pending',
+      expiresAt: { $gt: new Date() }
+    })
+
+    if (pendingInvitations.length > 0) {
+      const updatePromises = pendingInvitations.map(async (invitation) => {
+        await ChatRoom.findByIdAndUpdate(
+          invitation.chatRoomId,
+          { $addToSet: { members: user._id } }
+        )
+
+        invitation.status = 'accepted'
+        await invitation.save()
       })
 
-      if(pendingInvitations.length > 0){
-        const updatePromises = pendingInvitations.map(async (invitation) => {
-          await ChatRoom.findByIdAndUpdate(
-            invitation.chatRoomId,
-            { $addToSet: { members: user._id }}
-          )
+      await Promise.all(updatePromises)
+    }
 
-          invitation.status = 'accepted'
-          await invitation.save()
-        })
-
-        await Promise.all(updatePromises)
-      }
-
-      const emailSent = await sendVerificationEmail(user.staff_email, verificationToken)
-      if(!emailSent){
-        console.error("Failed to send verification email")
-      }
-      res.status(200).json(user);
+    const emailSent = await sendVerificationEmail(user.staff_email, verificationToken)
+    if (!emailSent) {
+      console.error("Failed to send verification email")
+    }
+    res.status(200).json(user);
   } catch (error) {
     console.error(error)
     res.status(500).json(error);
@@ -80,8 +80,8 @@ router.post("/login", async (req, res) => {
         });
     }
 
-    if(!user.isVerified){
-      return res.status(403).json({ msg: "Please verify your email before logging in"});
+    if (!user.isVerified) {
+      return res.status(403).json({ msg: "Please verify your email before logging in" });
     }
 
     const isPasswordValid = await bcrypt.compare(
@@ -100,109 +100,116 @@ router.post("/login", async (req, res) => {
 });
 
 
-router.get('/verify-email', async (req, res) => {
+router.get("/verify-email", async (req, res) => {
   try {
     const token = req.query.token;
-    const user = await User.findOne({
-      verificationToken: token,
-      verificationTokenExpires: { $gt: Date.now() }
-    })
+    console.log(`Verification token received: ${token}`);
 
-    if(!user){
-      return res.status(400).json({ msg: "Invalid or expired verification token "})
-    }
+    const userWithToken = await User.findOne({ verificationToken: token });
 
-    user.isVerified = true
-    user.verificationToken = undefined
-    user.verificationTokenExpires = undefined
-
-    await user.save()
-
-    const pendingInvitations = await Invitation.find({ 
-      email: user.staff_email,
-      status: 'pending',
-      expiresAt: { $gt: new Date() }
-    });
-
-    if (pendingInvitations.length > 0) {
-      const updatePromises = pendingInvitations.map(async (invitation) => {
-        await ChatRoom.findByIdAndUpdate(
-          invitation.chatRoomId,
-          { $addToSet: { members: user._id } }
-        );
-        
-        invitation.status = 'accepted';
-        await invitation.save();
+    if (!userWithToken) {
+      console.log('No user found with this token');
+      return res.status(400).json({
+        msg: "Invalid verification token",
+        invalidToken: true
       });
-
-      await Promise.all(updatePromises);
     }
 
-    res.status(200).json({ msg: "Email verified successfully"})
+    if (userWithToken.isVerified) {
+      console.log('User already verified');
+      userWithToken.verificationToken = undefined;
+      userWithToken.verificationTokenExpires = undefined;
+      return res.status(200).json({
+        msg: "Email already verified",
+        alreadyVerified: true
+      });
+    }
+
+    if (userWithToken.verificationTokenExpires < new Date()) {
+      console.log('Token expired');
+      return res.status(400).json({
+        msg: "Verification token has expired",
+        expiredToken: true
+      });
+    }
+
+    userWithToken.isVerified = true;
+
+    await userWithToken.save();
+
+    console.log('User verified successfully');
+    res.status(200).json({
+      msg: "Email verified successfully",
+      success: true
+    });
+  } catch (error) {
+    console.error('Verification error:', error);
+    res.status(500).json({
+      msg: "An error occurred during verification",
+      error: error.message
+    });
+  }
+});
+
+
+router.post("/invite", async (req, res) => {
+
+  try {
+    const { inviterId, email, chatRoomId } = req.body
+
+    const inviter = await User.findById(inviterId)
+    const chatRoom = await ChatRoom.findById(chatRoomId)
+
+    if(!inviter || !chatRoom){
+      return res.status(404).json({ msg: "Invalid inviter or chat room "})
+    }
+
+    const existingUser = await User.findOne({staff_email: email })
+
+    const invitationToken = crypto.randomBytes(20).toString('hex')
+    const expiresAt = new Date()
+    expiresAt.setDate(expiresAt.getDate() + 7)
+
+    if(existingUser){
+
+      if(!existingUser.isVerified){
+        return res.status(400).json({ msg: "User exists but email is not verified "})
+      }
+
+      await ChatRoom.findByIdAndUpdate(chatRoomId, {
+        $addToSet: { members: existingUser._id }
+      })
+
+      return res.status(200).json({ msg: "User added to chat room "})
+
+    }else{
+      const newInvitation = new Invitation({
+        email,
+        token: invitationToken,
+        inviterId,
+        ChatRoomId,
+        expiresAt,
+        status: 'pending'
+      })
+
+      await newInvitation.save()
+
+      const emailSent = await sendInvitationEmail(email, inviter.name, invitationToken)
+
+      if(!emailSent){
+        await Invitation.deleteOne({token: invitationToken})
+        return res.status(500).json({ msg: "Failed to send invitation email"})
+      }
+
+      return res.status(200).json({
+        msg: "Invitation sent successfully",
+        invitationId: newInvitation._id
+      })
+    }
+
   } catch (error) {
     res.status(500).json(error)
   }
 })
-
-
-// router.post("/invite", async (req, res) => {
-
-//   try {
-//     const { inviterId, email, chatRoomId } = req.body
-
-//     const inviter = await User.findById(inviterId)
-//     const chatRoom = await ChatRoom.findById(chatRoomId)
-
-//     if(!inviter || !chatRoom){
-//       return res.status(404).json({ msg: "Invalid inviter or chat room "})
-//     }
-
-//     const existingUser = await User.findOne({staff_email: email })
-
-//     const invitationToken = crypto.randomBytes(20).toString('hex')
-//     const expiresAt = new Date()
-//     expiresAt.setDate(expiresAt.getDate() + 7)
-
-//     if(existingUser){
-
-//       if(!existingUser.isVerified){
-//         return res.status(400).json({ msg: "User exists but email is not verified "})
-//       }
-
-//       await ChatRoom.findByIdAndUpdate(chatRoomId, {
-//         $addToSet: { members: existingUser._id }
-//       })
-
-//       return res.status(200).json({ msg: "User added to chat room "})
-
-//     }else{
-//       const newInvitation = new Invitation({
-//         email,
-//         token: invitationToken,
-//         inviterId,
-//         ChatRoomId,
-//         expiresAt,
-//         status: 'pending'
-//       })
-
-//       await newInvitation.save()
-
-//       const emailSent = await sendInvitationEmail(email, inviter.name, invitationToken)
-
-//       if(!emailSent){
-//         await Invitation.deleteOne({token: invitationToken})
-//         return res.status(500).json({ msg: "Failed to send invitation email"})
-//       }
-
-//       return res.status(200).json({
-//         msg: "Invitation sent successfully",
-//         invitationId: newInvitation._id
-//       })
-//     }
-
-//   } catch (error) {
-//     res.status(500).json(error)
-//   }
-// })
 
 module.exports = router;
