@@ -33,7 +33,23 @@ const UserSchema = new mongoose.Schema({
         required: true,
         min: 6
 
-    }
+    },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verificationtoken: {
+        type: String
+    },
+    verificationTokenExpires: {
+        type: Date
+    },
+    invitations: [{
+        chatRoomId: String,
+        inviterId: String,
+        token: String,
+        expiresAt: Date
+    }]
 },
 { timestamps: true }
     
