@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 
 const sendVerificationEmail = async (email, verificationToken) => {
-  const verificationUrl = `${process.env.REACT_APP_API_BASE_URL}/verify-email?token=${verificationToken}`;
+  const verificationUrl = `${process.env.REACT_APP_FRONTEND_BASE_URL}/verify-email?token=${verificationToken}`;
 
   const mailOptions = {
     from: `LetXChat <${process.env.EMAIL_USER}>`,
@@ -54,7 +54,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
 
 
 const sendInvitationEmail = async (email, inviterName, invitationToken) => {
-    const signupUrl = `${process.env.REACT_APP_API_BASE_URL}/register?invite=${invitationToken}`
+    const signupUrl = `${process.env.REACT_APP_FRONTEND_BASE_URL}/register?invite=${invitationToken}`
 
     const mailOptions = {
         from: process.env.EMAIL_USER,
