@@ -17,7 +17,7 @@ const ChatRoomSchema = new mongoose.Schema({
         required: true
     },
     members: {
-        type: Array,
+        type: [String],
         required: true
     }
 

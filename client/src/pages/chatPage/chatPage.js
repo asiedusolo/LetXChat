@@ -6,7 +6,8 @@ import { React, useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import { io } from "socket.io-client";
-import { FiSend, FiPaperclip, FiSearch } from "react-icons/fi";
+import { FiSend, FiPaperclip, FiSearch, FiUserPlus } from "react-icons/fi";
+import InviteModal from "../../components/inviteModal";
 
 
 const ChatPage = () => {
@@ -20,6 +21,7 @@ const ChatPage = () => {
   const socket = useRef();
   const scrollRef = useRef(null);
   const [fileData, setFileData] = useState();
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
   const REACT_APP_ENV = process.env.REACT_APP_ENV
 
@@ -86,6 +88,7 @@ const ChatPage = () => {
         const response = await axios.get(
           `${REACT_APP_API_BASE_URL}/api/chatRooms/${user._id}`
         );
+        console.log({userChatRooms: response})
         setChatRooms(response.data);
       } catch (error) {
         console.log(error);
@@ -213,6 +216,7 @@ const ChatPage = () => {
                   <ChatRoom
                     key={chatRoom._id}
                     chatRoom={chatRoom}
+                    currentUser={user}
                     handleChatRoomSelect={handleChatRoomSelect}
                   />
                 ))}
@@ -300,6 +304,19 @@ const ChatPage = () => {
           </div>
         )}
       </div>
+
+      <button
+        onClick={() => setIsInviteModalOpen(true)}
+        className="fixed bottom-6 right-6 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700"
+      >
+        <FiUserPlus size={24} />
+      </button>
+
+      <InviteModal
+        isOpen={isInviteModalOpen}
+        onClose={() => setIsInviteModalOpen(false)}
+        currentUser={user}
+      />
     </div>
   );
 };

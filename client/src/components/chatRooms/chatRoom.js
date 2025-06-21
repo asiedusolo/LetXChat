@@ -1,7 +1,24 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiMessageSquare } from 'react-icons/fi';
+import axios from 'axios';
 
-const ChatRoom = ({ chatRoom, handleChatRoomSelect }) => {
+const ChatRoom = ({ chatRoom, currentUser, handleChatRoomSelect }) => {
+    const [chatRoomName, setChatRoomName] = useState('')
+    const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
+
+    useEffect(() => {
+        const getChatRoomPartner = async () => {
+                const response =  await axios.get(
+                `${REACT_APP_API_BASE_URL}/api/user?userId=${chatRoom.creatorId}`
+            )
+            console.log({response})
+            setChatRoomName(response.data.name)
+            }
+        if(chatRoom.members.length === 2){
+            getChatRoomPartner()
+        }
+    }, [])
+
     return (
         <div 
             className="flex items-center p-3 hover:bg-gray-50 rounded-md cursor-pointer transition-colors"
@@ -12,7 +29,7 @@ const ChatRoom = ({ chatRoom, handleChatRoomSelect }) => {
             </div>
             <div className="min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
-                    {chatRoom.chatRoomName}
+                    {currentUser._id ===  chatRoom.creatorId || chatRoom.members.length > 2  ?   chatRoom.chatRoomName: chatRoomName}
                 </p>
                 <p className="text-xs text-gray-500 truncate">
                     {chatRoom.members.length} members

@@ -17,11 +17,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const allMessages = await Message.find({})
-        //test email 
 
-        await sendInvitationEmail('solomon.asiedu@amalitech.com', 'Solomon', 'oajeoijoeijaoe')
-
-        console.log("Passed!!!!!!!!!!!!")
         res.status(200).json(allMessages)
     } catch (error) {
         res.status(500).json(error)        

@@ -31,16 +31,9 @@ const InvitationSchema = new mongoose.Schema({
         type: String,
         enum: ['pending', 'accepted', 'expired'],
         default: 'pending'
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now
     }
 
 })
-
-InvitationSchema.index({ email: 1, token: 1, status: 1 });
-InvitationSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 
 module.exports = mongoose.model('Invitation', InvitationSchema)

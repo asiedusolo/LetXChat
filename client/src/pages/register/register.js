@@ -12,28 +12,17 @@ const Register = () => {
   const navigate = useNavigate();
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
-  const [chatRoomIds, setChatRoomIds] = useState([]);
   const [error, setError] = useState(null);
-   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  useEffect(() => {
-    const fetchChatRooms = async () => {
-      try {
-        const response = await axios.get(`${REACT_APP_API_BASE_URL}/api/chatRooms`);
-        setChatRoomIds(response.data.map((chatroom) => chatroom._id));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchChatRooms();
-  }, []);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true)
+    setIsSubmitting(true);
+    
     if (passwordRef.current.value !== passwordConfirmRef.current.value) {
       setError({ message: "Passwords do not match" });
       passwordConfirmRef.current.setCustomValidity("Password mismatch");
+      setIsSubmitting(false);
       return;
     }
     
@@ -52,40 +41,15 @@ const Register = () => {
         `${REACT_APP_API_BASE_URL}/api/auth/register`,
         newUser
       );
-      
-      const allChatRoomIds = chatRoomIds;
-        const randomInt =
-          Math.floor(Math.random() * (allChatRoomIds.length - 1 - 3 + 1)) + 3;
-        function getRandomSubarray(arr, size) {
-          var shuffled = arr.slice(0),
-            i = arr.length,
-            temp,
-            index;
-          while (i--) {
-            index = Math.floor((i + 1) * Math.random());
-            temp = shuffled[index];
-            shuffled[index] = shuffled[i];
-            shuffled[i] = temp;
-          }
-          return shuffled.slice(0, size);
-        }
-        const subArray = getRandomSubarray(allChatRoomIds, randomInt);
-        await axios
-          .all(
-            subArray.map((member) =>
-              axios.put(
-                `${REACT_APP_API_BASE_URL}/api/chatRooms/${member}/${response.data._id}`
-              )
-            )
-          )
-          .then((response) => console.log("Joined chat rooms select"));
-      
+      console.log({response});
       navigate("/login");
     } catch (error) {
       console.log(error);
       setError({ 
         message: error.response?.data?.message || "Registration failed. Please try again." 
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
