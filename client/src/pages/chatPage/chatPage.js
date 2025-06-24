@@ -6,7 +6,7 @@ import { React, useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import { io } from "socket.io-client";
-import { FiSend, FiPaperclip, FiSearch, FiUserPlus } from "react-icons/fi";
+import { FiSend, FiPaperclip, FiSearch, FiUserPlus, FiMic } from "react-icons/fi";
 import InviteModal from "../../components/inviteModal";
 
 
@@ -22,8 +22,104 @@ const ChatPage = () => {
   const scrollRef = useRef(null);
   const [fileData, setFileData] = useState();
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const [audioURL, setAudioURL] = useState('');
+  const [isInCall, setIsInCall] = useState(false);
+  const [callStatus, setCallStatus] = useState('idle');
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const peerConnectionRef = useRef(null);
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
   const REACT_APP_ENV = process.env.REACT_APP_ENV
+
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          audioChunksRef.current.push(e.data);
+        }
+      };
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+        const audioUrl = URL.createObjectURL(audioBlob);
+        setAudioBlob(audioBlob);
+        setAudioURL(audioUrl);
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (err) {
+      console.error('Error accessing microphone:', err);
+    }
+  };
+
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current) {
+      mediaRecorderRef.current.stop();
+      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
+      setIsRecording(false);
+    }
+  };
+
+  const sendAudio = async () => {
+    if (audioBlob) {
+      const audioFile = new File([audioBlob], 'audio-recording.wav', {
+        type: 'audio/wav',
+        lastModified: Date.now()
+      });
+      const data = new FormData();
+      data.append("file", audioFile);
+      try {
+        const response = await axios.post(
+          `${REACT_APP_API_BASE_URL}/api/upload`,
+          data
+        );
+
+        const textData = REACT_APP_ENV === 'development' ? response.data.filename : response.data.url;
+
+        const messageBody = {
+          chatRoomId: currentChatRoom._id,
+          senderId: user._id,
+          senderUsername: user.username,
+          text: textData,
+        };
+
+        const socketNewMessage = {
+          chatRoomId: currentChatRoom._id,
+          chatRoomName: currentChatRoom.chatRoomName,
+          senderId: user._id,
+          senderUsername: user.username,
+          text: textData,
+        };
+
+        socket.current.emit("sendMessage", socketNewMessage);
+
+        const messageResponse = await axios.post(
+          `${REACT_APP_API_BASE_URL}/api/messages`,
+          messageBody
+        );
+
+        setCurrentChatRoomMessages([
+          ...currentChatRoomMessages,
+          messageResponse.data
+        ]);
+        setAudioBlob(null);
+        setAudioURL('');
+      } catch (error) {
+        console.error('Error sending audio:', error);
+      }
+    }
+  };
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -33,9 +129,9 @@ const ChatPage = () => {
       );
     };
   });
-  
+
   useEffect(() => {
-    console.log({socket_url: process.env.REACT_APP_SOCKET_BASE_URL})
+    console.log({ socket_url: process.env.REACT_APP_SOCKET_BASE_URL })
     socket.current = io(process.env.REACT_APP_SOCKET_BASE_URL || "http://localhost:8900", {
       path: '/socket.io',
       transports: ['websocket']
@@ -56,7 +152,7 @@ const ChatPage = () => {
         chatRooms.map((chatRoom) => chatRoom.chatRoomName)
       );
   }, []);
-  
+
   useEffect(() => {
     arrivalMessage &&
       user._id !== arrivalMessage.senderId &&
@@ -71,7 +167,7 @@ const ChatPage = () => {
       socket.current.on("getUsersChatRooms", (usersChatRooms) => { });
     }
   }, [chatRooms, user._id]);
-  
+
   useEffect(() => {
     const getCurrentChatRoomMessages = async () => {
       const response = await axios.get(
@@ -81,14 +177,14 @@ const ChatPage = () => {
     };
     getCurrentChatRoomMessages();
   }, [currentChatRoom._id]);
-  
+
   useEffect(() => {
     const getChatRooms = async () => {
       try {
         const response = await axios.get(
           `${REACT_APP_API_BASE_URL}/api/chatRooms/${user._id}`
         );
-        console.log({userChatRooms: response})
+        console.log({ userChatRooms: response })
         setChatRooms(response.data);
       } catch (error) {
         console.log(error);
@@ -96,7 +192,7 @@ const ChatPage = () => {
     };
     getChatRooms();
   }, [user._id]);
-  
+
   const handleChatRoomSelect = (chatRoom) => {
     setCurrentChatRoom(chatRoom);
     setCurrentChatRoomMembers(chatRoom.members);
@@ -149,14 +245,15 @@ const ChatPage = () => {
     if (fileData && currentChatRoom) {
       const data = new FormData();
       data.append("file", fileData);
+      console.log({ fileData })
       try {
         const response = await axios.post(
           `${REACT_APP_API_BASE_URL}/api/upload`,
           data
         );
-        console.log({REACT_APP_ENV: REACT_APP_ENV})
+        console.log({ REACT_APP_ENV: REACT_APP_ENV })
         const textData = REACT_APP_ENV === 'development' ? response.data.filename : response.data.url
-        console.log({textData})
+        console.log({ textData })
         const messageBody = {
           chatRoomId: currentChatRoom._id,
           senderId: user._id,
@@ -243,41 +340,73 @@ const ChatPage = () => {
                 </div>
               </div>
 
-              <div className="border-t border-gray-200 p-4">
-                <form onSubmit={onSubmitHandler} className="mb-2">
-                  <div className="flex items-center">
-                    <label className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
-                      <FiPaperclip className="h-5 w-5 text-gray-500" />
-                      <input
-                        type="file"
-                        name="mediaFile"
-                        onChange={fileChangeHandler}
-                        className="hidden"
-                        id="file-upload"
-                      />
-                    </label>
+              {/* Audio Recording UI */}
+              {audioURL && (
+                <div className="border-t border-gray-200 p-4 bg-gray-50">
+                  <div className="flex items-center space-x-4">
+                    <audio src={audioURL} controls className="flex-1" />
                     <button
-                      type="submit"
-                      className="ml-2 px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+                      onClick={sendAudio}
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                     >
-                      Send File
+                      Send
+                    </button>
+                    <button
+                      onClick={() => setAudioURL('')}
+                      className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded"
+                    >
+                      Discard
                     </button>
                   </div>
-                </form>
-                <form onSubmit={sendMessage} className="flex">
-                  <input
-                    className="flex-1 border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="Type your message..."
-                    value={newMessage}
-                    onChange={(e) => setNewMessage(e.target.value)}
-                  />
+                </div>
+              )}
+
+              <div className="border-t border-gray-200 p-4">
+                <div className="flex space-x-2 mb-2">
+                  {/* Audio Recording Button */}
                   <button
-                    type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={`p-2 rounded-full ${isRecording ? 'bg-red-100 text-red-600' : 'bg-gray-100 hover:bg-gray-200'}`}
                   >
-                    <FiSend className="h-5 w-5" />
+                    <FiMic className="h-5 w-5" />
                   </button>
-                </form>
+
+
+                  <form onSubmit={onSubmitHandler} className="mb-2">
+                    <div className="flex items-center">
+                      <label className="cursor-pointer p-2 rounded-full hover:bg-gray-100">
+                        <FiPaperclip className="h-5 w-5 text-gray-500" />
+                        <input
+                          type="file"
+                          name="mediaFile"
+                          onChange={fileChangeHandler}
+                          className="hidden"
+                          id="file-upload"
+                        />
+                      </label>
+                      <button
+                        type="submit"
+                        className="ml-2 px-3 py-1 text-sm text-gray-600 hover:text-gray-800"
+                      >
+                        Send File
+                      </button>
+                    </div>
+                  </form>
+                  <form onSubmit={sendMessage} className="flex">
+                    <input
+                      className="flex-1 border border-gray-300 rounded-l-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Type your message..."
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                    />
+                    <button
+                      type="submit"
+                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                    >
+                      <FiSend className="h-5 w-5" />
+                    </button>
+                  </form>
+                </div>
               </div>
             </>
           ) : (
