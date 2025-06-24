@@ -49,10 +49,10 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
           )}
           
           {type === "audio" && (
-            <div className="mt-2">
+            <div className={`mt-2 ${ownMessage ? 'w-[150px]': 'w-[200px]'}`}>
               <audio 
                 controls
-                className="w-full"
+                className="w-full "
               >
                 <source src={REACT_APP_ENV === 'development' ? PF + text : text} type="audio/mpeg" />
                 Your browser does not support the audio element.
@@ -72,7 +72,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
     <div className={messageContainerClasses}>
       <div className={messageContentClasses}>
         <div className="flex items-center justify-between mb-1">
-          <span className="text-xs font-medium">
+          <span className={`text-xs font-medium mr-4`}>
             {!ownMessage && senderUsername}
           </span>
           <TimeAgo 
@@ -80,7 +80,7 @@ const Message = ({ ownMessage, text, senderUsername, createdAt }) => {
             date={createdAt} 
           />
         </div>
-        <p className="text-sm">{text}</p>
+        <p className="text-sm ">{text}</p>
       </div>
     </div>
   );
