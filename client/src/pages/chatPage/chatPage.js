@@ -6,7 +6,7 @@ import { React, useContext, useState, useEffect, useRef } from "react";
 import { AuthContext } from "../../contexts/auth/authcontext";
 import axios from "axios";
 import { io } from "socket.io-client";
-import { FiSend, FiPaperclip, FiSearch, FiUserPlus, FiMic } from "react-icons/fi";
+import { FiSend, FiPaperclip, FiSearch, FiUserPlus, FiMic, FiVideo } from "react-icons/fi";
 import InviteModal from "../../components/inviteModal";
 
 
@@ -20,6 +20,11 @@ const ChatPage = () => {
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const socket = useRef();
   const scrollRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
+  const localVideoRef = useRef(null);
+  const remoteVideoRef = useRef(null);
+  const peerConnectionRef = useRef(null);
   const [fileData, setFileData] = useState();
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
   const [isRecording, setIsRecording] = useState(false);
@@ -27,11 +32,8 @@ const ChatPage = () => {
   const [audioURL, setAudioURL] = useState('');
   const [isInCall, setIsInCall] = useState(false);
   const [callStatus, setCallStatus] = useState('idle');
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-  const peerConnectionRef = useRef(null);
+  const [localStream, setLocalStream] = useState(null);
+  const [remoteStream, setRemoteStream] = useState(null);
   const REACT_APP_API_BASE_URL = process.env.REACT_APP_API_BASE_URL
   const REACT_APP_ENV = process.env.REACT_APP_ENV
 
@@ -119,7 +121,167 @@ const ChatPage = () => {
         console.error('Error sending audio:', error);
       }
     }
+  }
+
+  const createPeerConnection = () => {
+  const configuration = {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      // Add your TURN servers if needed
+    ]
   };
+
+  const pc = new RTCPeerConnection(configuration);
+  
+  // ICE candidate handling
+  pc.onicecandidate = (event) => {
+    if (event.candidate) {
+      socket.current.emit('ice-candidate', {
+        candidate: event.candidate,
+        roomId: currentChatRoom._id
+      });
+    }
+  };
+
+  // Handle remote stream
+  pc.ontrack = (event) => {
+    setRemoteStream(event.streams[0]);
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = event.streams[0];
+    }
+    setCallStatus('in_call');
+  };
+
+  return pc;
+};
+
+  const startCall = async () => {
+    try {
+      setCallStatus('calling');
+
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
+      setLocalStream(stream);
+
+      await new Promise(resolve => setTimeout(resolve, 3000));
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = stream;
+      } else {
+        console.error('Local video ref still not ready');
+        return;
+      }
+
+      peerConnectionRef.current = createPeerConnection();
+      const pc = peerConnectionRef.current; // Create local reference
+
+      stream.getTracks().forEach(track => pc.addTrack(track, stream));
+
+      const offer = await pc.createOffer();
+      await pc.setLocalDescription(offer);
+
+      socket.current.emit('call-initiated', {
+        offer,
+        roomId: currentChatRoom._id,
+        caller: user._id
+      });
+
+    } catch (err) {
+      console.error('Error starting call:', err);
+      setCallStatus('idle');
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
+    }
+  };
+
+  const endCall = () => {
+    if (peerConnectionRef.current) {
+      peerConnectionRef.current.close();
+      peerConnectionRef.current = null;
+    }
+
+    if (localStream) {
+      localStream.getTracks().forEach(track => track.stop());
+      setLocalStream(null);
+    }
+
+    if (remoteVideoRef.current?.srcObject) {
+      remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+      remoteVideoRef.current.srcObject = null;
+    }
+
+    setCallStatus('idle');
+    socket.current.emit('call-ended', { roomId: currentChatRoom._id });
+  };
+
+  useEffect(() => {
+    return () => {
+      endCall();
+    };
+  }, []);
+
+  // Socket listeners for video call
+  useEffect(() => {
+    if (!socket.current) return;
+
+    socket.current.on('call-initiated', async ({ offer, caller }) => {
+      if (user._id === caller) return; // Don't respond to our own call
+
+      try {
+        pc.ontrack = (event) => {
+          remoteVideoRef.current.srcObject = event.streams[0];
+          setIsInCall(true);
+          setCallStatus('in_call');
+        };
+
+        await pc.setRemoteDescription(new RTCSessionDescription(offer));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+
+        socket.current.emit('call-answered', {
+          answer,
+          roomId: currentChatRoom._id,
+          callee: user._id
+        });
+      } catch (err) {
+        console.error('Error answering call:', err);
+      }
+    });
+
+    socket.current.on('call-answered', async ({ answer }) => {
+      if (peerConnectionRef.current) {
+        await peerConnectionRef.current.setRemoteDescription(new RTCSessionDescription(answer));
+        setIsInCall(true);
+        setCallStatus('in_call');
+      }
+    });
+
+    socket.current.on('ice-candidate', async ({ candidate }) => {
+      if (peerConnectionRef.current) {
+        try {
+          await peerConnectionRef.current.addIceCandidate(new RTCIceCandidate(candidate));
+        } catch (err) {
+          console.error('Error adding ICE candidate:', err);
+        }
+      }
+    });
+
+    socket.current.on('call-ended', () => {
+      endCall();
+    });
+
+    return () => {
+      if (socket.current) {
+        socket.current.off('call-initiated');
+        socket.current.off('call-answered');
+        socket.current.off('ice-candidate');
+        socket.current.off('call-ended');
+      }
+    };
+  }, [currentChatRoom._id, user._id]);
 
   useEffect(() => {
     window.onpopstate = () => {
@@ -326,6 +488,58 @@ const ChatPage = () => {
         <div className="flex-1 flex flex-col bg-white">
           {currentChatRoom._id ? (
             <>
+              {/* Video Call UI */}
+              {
+                callStatus !== 'idle' && (
+                  <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex flex-col items-center justify-center p-4">
+                    <div className="flex w-full max-w-4xl h-full">
+                      {localStream && (
+                        <div className="absolute bottom-4 right-4 w-1/4 max-w-xs">
+                          <video
+                            ref={localVideoRef}
+                            autoPlay
+                            muted
+                            playsInline
+                            className="w-full rounded-lg shadow-lg"
+                          />
+                        </div>
+                      )}
+
+                      {/* Remote Video or Status */}
+                      <div className="flex-1 flex items-center justify-center bg-gray-900 rounded-lg">
+                        {callStatus === 'in_call' ? (
+                          <video
+                            ref={remoteVideoRef}
+                            autoPlay
+                            playsInline
+                            className="h-full max-h-screen object-contain"
+                          />
+                        ) : (
+                          <div className="text-white text-center p-8">
+                            <p className="text-xl mb-4">
+                              {callStatus === 'calling' ? 'Calling...' : 'Connecting...'}
+                            </p>
+                            <div className="animate-pulse">
+                              <FiVideo className="h-12 w-12 mx-auto" />
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="mt-4">
+                      <button
+                        onClick={endCall}
+                        className="bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-full flex items-center"
+                      >
+                        <FiVideo className="mr-2" />
+                        End Call
+                      </button>
+                    </div>
+                  </div>
+                )
+              }
+
               <div className="flex-1 overflow-y-auto p-4">
                 <div className="max-w-3xl mx-auto space-y-4">
                   {currentChatRoomMessages.map((message) => (
@@ -369,6 +583,15 @@ const ChatPage = () => {
                     className={`p-2 rounded-full ${isRecording ? 'bg-red-100 text-red-600' : 'bg-gray-100 hover:bg-gray-200'}`}
                   >
                     <FiMic className="h-5 w-5" />
+                  </button>
+
+                  {/* Video Call Button */}
+                  <button
+                    onClick={startCall}
+                    className={`p-2 rounded-full ${callStatus !== 'idle' ? 'bg-green-500 text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+                    disabled={callStatus !== 'idle'}
+                  >
+                    <FiVideo className="h-5 w-5" />
                   </button>
 
 

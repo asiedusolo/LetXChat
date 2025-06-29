@@ -72,6 +72,22 @@ io.on("connection", (socket) => {
     }
   );
 
+   socket.on('call-initiated', ({ offer, roomId, caller }) => {
+    socket.to(roomId).emit('call-initiated', { offer, caller });
+  });
+
+  socket.on('call-answered', ({ answer, roomId, callee }) => {
+    socket.to(roomId).emit('call-answered', { answer, callee });
+  });
+
+  socket.on('ice-candidate', ({ candidate, roomId }) => {
+    socket.to(roomId).emit('ice-candidate', { candidate });
+  });
+
+  socket.on('call-ended', ({ roomId }) => {
+    socket.to(roomId).emit('call-ended');
+  });
+
   socket.on("disconnect", () => {
     removeUser(socket.id)
     console.log("user disconnected");
